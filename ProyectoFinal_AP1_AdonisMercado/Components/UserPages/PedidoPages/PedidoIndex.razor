@@ -87,8 +87,13 @@
                                 <td>@pedido.Distribuidor?.Nombre</td>
                                 <td>
 
+                                    <button class="btn btn-sm btn-info"
+                                            @onclick="() => VerDetalle(pedido)">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+
                                     <a href="/pedido/edit/@pedido.PedidoId"
-                                       class="btn btn-sm btn-warning text-white me-2">
+                                       class="btn btn-sm btn-warning text-white">
                                         <i class="fa-solid fa-pen"></i>
                                     </a>
 
@@ -143,6 +148,27 @@
     </div>
 }
 
+@if (mostrarDetalle)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.6)">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h6 class="fw-bold">Detalle del Pedido</h6>
+                    <button class="btn-close" @onclick="CerrarDetalle"></button>
+                </div>
+
+                <div class="modal-body">
+                    <PedidoDetails Pedido="PedidoSeleccionado" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+
 @code {
     public List<Pedido> ListaPedidos { get; set; } = new();
     public string Filtro { get; set; } = "";
@@ -152,6 +178,9 @@
 
     public bool mostrarModal = false;
     public int PedidoIdAEliminar { get; set; }
+
+    public bool mostrarDetalle = false;
+    public Pedido? PedidoSeleccionado { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -208,5 +237,17 @@
             ListaPedidos = await pedidoServices.ListarPedidos(d => d.PedidoId > 0);
 
         CerrarModal();
+    }
+
+
+    public void VerDetalle(Pedido p)
+    {
+        PedidoSeleccionado = p;
+        mostrarDetalle = true;
+    }
+
+    public void CerrarDetalle()
+    {
+        mostrarDetalle = false;
     }
 }

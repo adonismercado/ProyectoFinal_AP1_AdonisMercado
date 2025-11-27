@@ -1,0 +1,102 @@
+﻿@inject VehiculoService vehiculoService
+@inject DistribuidorServices distribuidorServices
+
+<div class="container py-3">
+
+    @if (Pedido == null)
+    {
+        <div class="alert alert-danger text-center">
+            No se encontró el pedido.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow border-0">
+
+            <div class="card-header bg-light">
+                <h4 class="fw-bold">
+                    <i class="fa-solid fa-file-invoice"></i> Detalle del Pedido #@Pedido.PedidoId
+                </h4>
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+                    <h5 class="fw-bold">Información del Pedido</h5>
+                    <p><strong>Nombre:</strong> @Pedido.NombrePedido</p>
+                    <p><strong>Fecha:</strong> @Pedido.FechaPedido.ToShortDateString()</p>
+                    <p><strong>Estado:</strong> @Pedido.Estado</p>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="fw-bold">Distribuidor</h5>
+                    <p><strong>Nombre:</strong> @Pedido.Distribuidor?.Nombre</p>
+                    <p><strong>Email:</strong> @Pedido.Distribuidor?.Email</p>
+                    <p><strong>Teléfono:</strong> @Pedido.Distribuidor?.Telefono</p>
+                </div>
+
+                <hr />
+
+                <h5 class="fw-bold mb-3">Vehículos del Pedido</h5>
+
+                <div class="table-responsive border rounded">
+                    <table class="table table-striped table-hover text-center align-middle m-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Vehículo</th>
+                                <th>Color</th>
+                                <th>Año</th>
+                                <th>Cant.</th>
+                                <th>Precio</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var det in Pedido.PedidoDetalles)
+                            {
+                                var v = ListaVehiculos.FirstOrDefault(x => x.VehiculoId == det.VehiculoId);
+
+                                <tr>
+                                    <td>
+                                        <img src="@($"/vehiculos/{v?.VehiculoId}.jpg")"
+                                             class="img-thumbnail"
+                                             style="width:60px; height:60px; object-fit:cover;"
+                                             onerror="this.src='/vehiculos/default.jpg'" />
+                                    </td>
+
+                                    <td>@v?.MarcaVehiculo @v?.ModeloVehiculo</td>
+                                    <td>@v?.ColorVehiculo</td>
+                                    <td>@v?.AnioFabricacion</td>
+                                    <td>@det.Cantidad</td>
+                                    <td>USD$@det.PrecioUnitario</td>
+                                    <td class="fw-bold text-danger">USD$@(det.Cantidad* det.PrecioUnitario)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <hr />
+
+                <div class="text-end fs-4 fw-bold text-danger">
+                    Total: USD$@Pedido.PedidoDetalles.Sum(p => p.Cantidad * p.PrecioUnitario)
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public Pedido? Pedido { get; set; }
+
+    public List<Vehiculo> ListaVehiculos { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaVehiculos = await vehiculoService.ListarVehiculos();
+    }
+}
