@@ -216,6 +216,10 @@
             else if (Filtro == "Distribuidor")
                 ListaPedidos = await pedidoServices.ListarPedidos(e => e.Distribuidor.Nombre.ToLower().Contains(ValorFiltro.ToLower()));
         }
+        else
+        {
+            ListaPedidos = await pedidoServices.ListarPedidos(p => p.PedidoId > 0);
+        }
     }
 
     public void AbrirModal(int id)
