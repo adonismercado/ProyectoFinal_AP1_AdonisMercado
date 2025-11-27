@@ -1,6 +1,5 @@
 ﻿@inherits LayoutComponentBase
 @inject AuthenticationStateProvider AuthStateProvider
-@inject IJSRuntime JS
 
 <div class="wrapper bg-danger">
 
@@ -18,28 +17,28 @@
 
                 <li class="sidebar-item">
                     <NavLink class="sidebar-link" href="">
-                        <i class="align-middle" data-feather="home"></i>
+                        <i class="fa-solid fa-house align-middle me-2"></i>
                         <span class="align-middle">Inicio</span>
                     </NavLink>
                 </li>
 
                 <li class="sidebar-item">
                     <NavLink class="sidebar-link" href="/clientes">
-                        <i class="align-middle" data-feather="users"></i>
+                        <i class="fa-solid fa-users align-middle me-2"></i>
                         <span class="align-middle">Distribuidores</span>
                     </NavLink>
                 </li>
 
                 <li class="sidebar-item">
                     <NavLink class="sidebar-link" href="/eventos">
-                        <i class="align-middle" data-feather="calendar"></i>
+                        <i class="fa-solid fa-cart-shopping align-middle me-2"></i>
                         <span class="align-middle">Pedidos</span>
                     </NavLink>
                 </li>
 
                 <li class="sidebar-item">
                     <NavLink class="sidebar-link" href="/eventos">
-                        <i class="align-middle" data-feather="sliders"></i>
+                        <i class="fa-solid fa-file-lines align-middle me-2"></i>
                         <span class="align-middle">Documentos</span>
                     </NavLink>
                 </li>
@@ -66,25 +65,21 @@
                         <li class="nav-item dropdown">
 
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                <i data-feather="user" class="align-middle me-1"></i>
+                                <i class="fa-solid fa-user me-2"></i>
                                 <span class="text-dark">@userName</span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end">
 
                                 <a class="dropdown-item" href="/Account/Manage">
-                                    <i data-feather="settings" class="align-middle me-1"></i>
+                                    <i class="fa-solid fa-gear me-2"></i>
                                     Perfil
                                 </a>
 
                                 <div class="dropdown-divider"></div>
 
-                                <form method="post" action="/Account/Logout" id="logoutForm" class="d-none">
-                                    <AntiforgeryToken />
-                                    <input type="hidden" name="returnUrl" value="/" />
-                                </form>
-
                                 <a class="dropdown-item text-danger fw-bold" href="/DoLogout">
+                                    <i class="fa-solid fa-right-from-bracket me-2"></i>
                                     Cerrar sesión
                                 </a>
 
@@ -95,7 +90,7 @@
                     {
                         <li class="nav-item">
                             <a class="nav-link" href="/Account/Login">
-                                <i data-feather="log-in" class="align-middle me-1"></i>
+                                <i class="fa-solid fa-right-to-bracket me-2"></i>
                                 Iniciar sesión
                             </a>
                         </li>
@@ -106,7 +101,6 @@
 
         </nav>
 
-        <!-- CONTENIDO -->
         <main class="content">
             @Body
         </main>
@@ -126,10 +120,5 @@
 
         isAuthenticated = user.Identity?.IsAuthenticated ?? false;
         userName = isAuthenticated ? user.Identity?.Name : null;
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await JS.InvokeVoidAsync("renderFeatherIcons");
     }
 }
