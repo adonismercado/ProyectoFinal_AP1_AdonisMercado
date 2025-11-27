@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject AuthenticationStateProvider AuthStateProvider
+@inject IJSRuntime JS
 
 <div class="wrapper bg-danger">
 
@@ -125,5 +126,10 @@
 
         isAuthenticated = user.Identity?.IsAuthenticated ?? false;
         userName = isAuthenticated ? user.Identity?.Name : null;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JS.InvokeVoidAsync("renderFeatherIcons");
     }
 }
