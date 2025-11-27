@@ -173,7 +173,7 @@
 	<div class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.6)">
 		<div class="modal-dialog modal-xl modal-dialog-centered">
 			<div class="modal-content">
-				
+
 				<div class="modal-header bg-light">
 					<h5 class="modal-title">
 						<i class="fa-solid fa-car"></i> Seleccionar Veh&iacute;culo
@@ -198,6 +198,11 @@
 										<h5 class="card-title text-black">@v.MarcaVehiculo @v.ModeloVehiculo - @v.AnioFabricacion</h5>
 										<p class="text-muted">USD$@v.Precio - @v.EstadoVehiculo</p>
 
+										<button class="btn btn-outline-danger w-100 mb-2"
+												@onclick="() => AbrirModalDatos(v)">
+											<i class="fa-solid fa-circle-info"></i> Detalles
+
+										</button>
 										<button class="btn btn-danger w-100"
 												@onclick="() => AbrirModalCantidadPrecio(v)">
 											Seleccionar
@@ -226,7 +231,7 @@
 					<h5 class="modal-title">
 						<i class="fa-solid fa-tag"></i> Configurar Detalle
 					</h5>
-					<button class="btn-close btn-close-black" 
+					<button class="btn-close btn-close-black"
 							@onclick="CerrarModalCantidadPrecio">
 					</button>
 				</div>
@@ -248,11 +253,11 @@
 					</p>
 					<div class="mb-3">
 						<label class="form-label">Cantidad</label>
-						<input type="number" class="form-control" @bind="Cantidad" min="1"/>
+						<input type="number" class="form-control" @bind="Cantidad" min="1" />
 					</div>
 					<div class="mb-3">
 						<label class="form-label">Precio</label>
-						<input type="number" class="form-control" @bind="Precio" readonly/>
+						<input type="number" class="form-control" @bind="Precio" readonly />
 					</div>
 				</div>
 
@@ -260,6 +265,59 @@
 					<button class="btn btn-secondary" @onclick="CerrarModalCantidadPrecio">Cerrar</button>
 					<button class="btn btn-danger" @onclick="AgregarDetalle">
 						<i class="fa-solid fa-check"></i> Agregar
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@if (mostrarModalDatosVehiculo)
+{
+	<div class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.6)">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header bg-light text-black">
+					<h5 class="modal-title">
+						<i class="fa-solid fa-car"></i> Detalles del Veh&iacute;culo
+					</h5>
+					<button class="btn-close btn-close-black"
+							@onclick="CerrarModalDatos">
+					</button>
+				</div>
+
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-5 text-center">
+							<img src="@($"/vehiculos/{VehiculoSeleccionado.VehiculoId}.jpg")"
+								 class="img-fluid rounded shadow-sm"
+								 style="max-height:300px; object-fit:cover;" />
+						</div>
+
+						<div class="col-md-7">
+							<h4 class="fw-bold">
+								@VehiculoSeleccionado.MarcaVehiculo @VehiculoSeleccionado.ModeloVehiculo
+							</h4>
+
+							<p class="text-muted">
+								Año: @VehiculoSeleccionado.AnioFabricacion
+							</p>
+
+							<p><strong>Color: @VehiculoSeleccionado.ColorVehiculo</strong></p>
+							<p><strong>N&uacute;mero de Chasis: @VehiculoSeleccionado.NumeroChasis</strong></p>
+							<p><strong>Estado: @VehiculoSeleccionado.EstadoVehiculo</strong></p>
+							<p><strong>Combustible: @VehiculoSeleccionado.TipoCombustible</strong></p>
+
+							<p class="mt-3 fs-5 fw-bold text-danger">
+								Precio: USD$@VehiculoSeleccionado.Precio
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-secondary" @onclick="CerrarModalDatos">
+						<i class="fa-solid fa-xmark"></i> Cerrar
 					</button>
 				</div>
 			</div>
@@ -280,6 +338,7 @@
 
 	public bool mostrarModalVehiculos = false;
 	public bool mostrarModalCantidadPrecio = false;
+	public bool mostrarModalDatosVehiculo = false;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -339,5 +398,16 @@
 	public void CerrarModalCantidadPrecio()
 	{
 		mostrarModalCantidadPrecio = false;
+	}
+
+	public void AbrirModalDatos(Vehiculo v)
+	{
+		VehiculoSeleccionado = v;
+		mostrarModalDatosVehiculo = true;
+	}
+
+	public void CerrarModalDatos()
+	{
+		mostrarModalDatosVehiculo = false;
 	}
 }
