@@ -1,0 +1,221 @@
+﻿@page "/Account/Manage/Passkeys"
+
+@using ProyectoFinal_AP1_AdonisMercado.Data
+@using Microsoft.AspNetCore.Identity
+@using System.ComponentModel.DataAnnotations
+@using System.Buffers.Text
+
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Passkeys</PageTitle>
+
+<div class="container d-flex justify-content-center align-items-start mt-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-12 col-sm-12 col-md-10 col-lg-7 col-xl-6">
+
+            <div class="card shadow-lg">
+                <div class="card-header text-center">
+                    <h2 class="card-title mb-0 fw-bold">Passkeys</h2>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <StatusMessage />
+
+                    @if (currentPasskeys is { Count: > 0 })
+                    {
+                        <div class="table-responsive mb-4">
+                            <table class="table table-striped">
+                                <tbody>
+                                    @foreach (var passkey in currentPasskeys)
+                                    {
+                                        var cid = Base64Url.EncodeToString(passkey.CredentialId);
+
+                                        <tr>
+                                            <td class="align-middle">@((passkey.Name ?? "Passkey sin nombre"))</td>
+                                            <td class="text-end">
+                                                <form @formname="@($"update-passkey-{cid}")"
+                                                      @onsubmit="UpdatePasskey"
+                                                      method="post" class="d-inline">
+                                                    <AntiforgeryToken />
+                                                    <input type="hidden" name="CredentialId" value="@cid" />
+
+                                                    <button type="submit"
+                                                            name="Action" value="rename"
+                                                            class="btn btn-outline-secondary btn-sm me-1">
+                                                        Renombrar
+                                                    </button>
+
+                                                    <button type="submit"
+                                                            name="Action" value="delete"
+                                                            class="btn btn-danger btn-sm">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-center text-muted mb-4">No tienes passkeys registrados.</p>
+                    }
+
+                    <form @formname="add-passkey" @onsubmit="AddPasskey" method="post">
+                        <AntiforgeryToken />
+
+                        @if (currentPasskeys is { Count: >= MaxPasskeyCount })
+                        {
+                            <p class="text-danger text-center">
+                                Has alcanzado el número máximo de passkeys permitidos.
+                            </p>
+                        }
+                        else
+                        {
+                            <PasskeySubmit Operation="PasskeyOperation.Create"
+                                           Name="Input"
+                                           class="btn btn-danger w-100">
+                                Añadir nuevo passkey
+                            </PasskeySubmit>
+                        }
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private const int MaxPasskeyCount = 100;
+
+    private ApplicationUser? user;
+    private IList<UserPasskeyInfo>? currentPasskeys;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm]
+    private string? Action { get; set; }
+
+    [SupplyParameterFromForm]
+    private string? CredentialId { get; set; }
+
+    [SupplyParameterFromForm(FormName = "add-passkey")]
+    private PasskeyInputModel Input { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Input ??= new();
+        user = await UserManager.GetUserAsync(HttpContext.User);
+
+        if (user is null)
+        {
+            RedirectManager.RedirectToInvalidUser(UserManager, HttpContext);
+            return;
+        }
+
+        currentPasskeys = await UserManager.GetPasskeysAsync(user);
+    }
+
+    private async Task AddPasskey()
+    {
+        if (user is null)
+        {
+            RedirectManager.RedirectToInvalidUser(UserManager, HttpContext);
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(Input.Error))
+        {
+            RedirectManager.RedirectToCurrentPageWithStatus($"Error: {Input.Error}", HttpContext);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(Input.CredentialJson))
+        {
+            RedirectManager.RedirectToCurrentPageWithStatus("Error: El navegador no proporcionó un passkey.", HttpContext);
+            return;
+        }
+
+        if (currentPasskeys!.Count >= MaxPasskeyCount)
+        {
+            RedirectManager.RedirectToCurrentPageWithStatus("Error: Límite máximo de passkeys alcanzado.", HttpContext);
+            return;
+        }
+
+        var attestationResult = await SignInManager.PerformPasskeyAttestationAsync(Input.CredentialJson);
+
+        if (!attestationResult.Succeeded)
+        {
+            RedirectManager.RedirectToCurrentPageWithStatus($"Error: No se pudo agregar el passkey: {attestationResult.Failure.Message}", HttpContext);
+            return;
+        }
+
+        var addResult = await UserManager.AddOrUpdatePasskeyAsync(user, attestationResult.Passkey);
+
+        if (!addResult.Succeeded)
+        {
+            RedirectManager.RedirectToCurrentPageWithStatus("Error: No se pudo guardar el passkey.", HttpContext);
+            return;
+        }
+
+        var id = Base64Url.EncodeToString(attestationResult.Passkey.CredentialId);
+        RedirectManager.RedirectTo($"Account/Manage/RenamePasskey/{id}");
+    }
+
+    private async Task UpdatePasskey()
+    {
+        if (Action == "rename")
+        {
+            RedirectManager.RedirectTo($"Account/Manage/RenamePasskey/{CredentialId}");
+            return;
+        }
+
+        if (Action == "delete")
+        {
+            await DeletePasskey();
+            return;
+        }
+
+        RedirectManager.RedirectToCurrentPageWithStatus("Error: Acción desconocida.", HttpContext);
+    }
+
+    private async Task DeletePasskey()
+    {
+        if (user is null)
+        {
+            RedirectManager.RedirectToInvalidUser(UserManager, HttpContext);
+            return;
+        }
+
+        byte[] credentialId;
+
+        try
+        {
+            credentialId = Base64Url.DecodeFromChars(CredentialId);
+        }
+        catch
+        {
+            RedirectManager.RedirectToCurrentPageWithStatus("Error: ID de passkey inválido.", HttpContext);
+            return;
+        }
+
+        var result = await UserManager.RemovePasskeyAsync(user, credentialId);
+
+        if (!result.Succeeded)
+        {
+            RedirectManager.RedirectToCurrentPageWithStatus("Error: No se pudo eliminar el passkey.", HttpContext);
+            return;
+        }
+
+        RedirectManager.RedirectToCurrentPageWithStatus("Passkey eliminado correctamente.", HttpContext);
+    }
+}

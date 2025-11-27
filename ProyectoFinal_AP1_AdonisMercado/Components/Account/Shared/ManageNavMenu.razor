@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ProyectoFinal_AP1_AdonisMercado.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+
+<div class="list-group">
+
+    <NavLink class="list-group-item list-group-item-action" href="Account/Manage" Match="NavLinkMatch.All">
+        <i data-feather="user" class="align-middle me-2"></i> Perfil
+    </NavLink>
+
+    <NavLink class="list-group-item list-group-item-action" href="Account/Manage/Email">
+        <i data-feather="mail" class="align-middle me-2"></i> Email
+    </NavLink>
+
+    <NavLink class="list-group-item list-group-item-action" href="Account/Manage/ChangePassword">
+        <i data-feather="lock" class="align-middle me-2"></i> Contraseña
+    </NavLink>
+
+    @if (hasExternalLogins)
+    {
+        <NavLink class="list-group-item list-group-item-action" href="Account/Manage/ExternalLogins">
+            <i data-feather="globe" class="align-middle me-2"></i> Logins externos
+        </NavLink>
+    }
+
+    <NavLink class="list-group-item list-group-item-action" href="Account/Manage/Passkeys">
+        <i data-feather="key" class="align-middle me-2"></i> Passkeys
+    </NavLink>
+
+</div>
+
+
+@code {
+    private bool hasExternalLogins;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    }
+}

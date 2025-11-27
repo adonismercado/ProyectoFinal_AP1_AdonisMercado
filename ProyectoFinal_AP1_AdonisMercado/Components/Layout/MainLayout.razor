@@ -1,0 +1,129 @@
+﻿@inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthStateProvider
+
+<div class="wrapper bg-danger">
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="sidebar js-sidebar">
+        <div class="sidebar-content js-simplebar">
+
+            <a class="sidebar-brand" href="/">
+                <span class="align-middle">AutoFranklin - Compras</span>
+            </a>
+
+            <ul class="sidebar-nav">
+
+                <li class="sidebar-header">Menú</li>
+
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="">
+                        <i class="align-middle" data-feather="home"></i>
+                        <span class="align-middle">Inicio</span>
+                    </NavLink>
+                </li>
+
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="/clientes">
+                        <i class="align-middle" data-feather="users"></i>
+                        <span class="align-middle">Distribuidores</span>
+                    </NavLink>
+                </li>
+
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="/eventos">
+                        <i class="align-middle" data-feather="calendar"></i>
+                        <span class="align-middle">Pedidos</span>
+                    </NavLink>
+                </li>
+
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="/eventos">
+                        <i class="align-middle" data-feather="sliders"></i>
+                        <span class="align-middle">Documentos</span>
+                    </NavLink>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- TOPBAR -->
+        <nav class="navbar navbar-expand navbar-light navbar-bg">
+
+            <a class="sidebar-toggle js-sidebar-toggle">
+                <i class="hamburger align-self-center"></i>
+            </a>
+
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav ms-auto">
+
+                    @if (isAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                <i data-feather="user" class="align-middle me-1"></i>
+                                <span class="text-dark">@userName</span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end">
+
+                                <a class="dropdown-item" href="/Account/Manage">
+                                    <i data-feather="settings" class="align-middle me-1"></i>
+                                    Perfil
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <form method="post" action="/Account/Logout" id="logoutForm" class="d-none">
+                                    <AntiforgeryToken />
+                                    <input type="hidden" name="returnUrl" value="/" />
+                                </form>
+
+                                <a class="dropdown-item text-danger fw-bold" href="/DoLogout">
+                                    Cerrar sesión
+                                </a>
+
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Account/Login">
+                                <i data-feather="log-in" class="align-middle me-1"></i>
+                                Iniciar sesión
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+
+        </nav>
+
+        <!-- CONTENIDO -->
+        <main class="content">
+            @Body
+        </main>
+
+    </div>
+
+</div>
+
+@code {
+    private bool isAuthenticated;
+    private string? userName;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        isAuthenticated = user.Identity?.IsAuthenticated ?? false;
+        userName = isAuthenticated ? user.Identity?.Name : null;
+    }
+}
