@@ -12,264 +12,238 @@
 
 <div class="container-fluid py-4">
 
-    <!-- HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Crear Pedido</h2>
+	<!-- HEADER -->
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<h2 class="fw-bold">Crear Pedido</h2>
 
-        <a href="/pedido/index" class="btn btn-light d-flex align-items-center gap-2">
-            <i class="fa-solid fa-arrow-left"></i> Volver
-        </a>
-    </div>
+		<a href="/pedido/index" class="btn btn-light d-flex align-items-center gap-2">
+			<i class="fa-solid fa-arrow-left"></i> Volver
+		</a>
+	</div>
 
-    <div class="card shadow border-0">
-        <div class="card-body p-4">
+	<div class="card shadow border-0">
+		<div class="card-body p-4">
 
-            <EditForm Model="Pedido" OnValidSubmit="Guardar" FormName="CreatePedido">
+			<EditForm Model="Pedido" OnValidSubmit="Guardar" FormName="CreatePedido">
 
-                <DataAnnotationsValidator />
-                <ValidationSummary class="text-danger" />
+				<DataAnnotationsValidator />
+				<ValidationSummary class="text-danger" />
 
-                <!-- DISTRIBUIDOR -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Distribuidor</label>
-                    <select class="form-select form-control" @bind="Pedido.DistribuidorId">
-                        <option value="0" disabled selected>Seleccione un distribuidor</option>
-                        @foreach (var d in ListaDistribuidores)
-                        {
-                            <option value="@d.DistribuidorId">@d.Nombre</option>
-                        }
-                    </select>
-                </div>
+				<!-- DISTRIBUIDOR -->
+				<div class="mb-3">
+					<label class="form-label fw-bold">Distribuidor</label>
+					<select class="form-select form-control" @bind="Pedido.DistribuidorId">
+						<option value="0" disabled selected>Seleccione un distribuidor</option>
+						@foreach (var d in ListaDistribuidores)
+						{
+							<option value="@d.DistribuidorId">@d.Nombre</option>
+						}
+					</select>
+				</div>
 
-                <!-- PedidoID -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Pedido ID</label>
-                    <input type="number" class="form-control" @bind="Pedido.PedidoId" readonly />
-                </div>
+				<div class="mb-3">
+					<label class="form-label fw-bold">Pedido ID</label>
+					<input type="number" class="form-control" @bind="Pedido.PedidoId" readonly />
+				</div>
 
-                <!-- Fecha -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Fecha</label>
-                    <input type="date" class="form-control" @bind="Pedido.FechaPedido" />
-                </div>
+				<div class="mb-3">
+					<label class="form-label fw-bold">Fecha</label>
+					<input type="date" class="form-control" @bind="Pedido.FechaPedido" />
+				</div>
 
-                <!-- Nombre Pedido -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Nombre del Pedido</label>
-                    <input type="text" class="form-control" @bind="Pedido.NombrePedido" placeholder="Nombre" />
-                </div>
+				<div class="mb-3">
+					<label class="form-label fw-bold">Nombre del Pedido</label>
+					<input type="text" class="form-control" @bind="Pedido.NombrePedido" placeholder="Nombre" />
+				</div>
 
-                <!-- Estado -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Estado</label>
-                    <select class="form-select" @bind="Pedido.Estado">
-                        <option value="No Enviado">No Enviado</option>
-                        <option value="Enviado" disabled>Enviado</option>
-                    </select>
-                </div>
+				<div class="mb-3">
+					<label class="form-label fw-bold">Estado</label>
+					<select class="form-select" @bind="Pedido.Estado">
+						<option value="No Enviado">No Enviado</option>
+						<option value="Enviado" disabled>Enviado</option>
+					</select>
+				</div>
 
-                <hr />
+				<hr />
 
-                <!-- VEHÍCULOS -->
-                <div class="border p-3 rounded">
+				<div class="border p-3 rounded">
 
-                    <h4 class="fw-bold mb-3">
-                        <i class="fa-solid fa-car-side text-danger"></i> Vehículos
-                    </h4>
+					<h4 class="fw-bold mb-3">
+						<i class="fa-solid fa-car-side text-danger"></i> Vehículos
+					</h4>
 
-                    <div class="row g-3 align-items-end">
+					<div class="row g-3 align-items-end">
 
-                        <!-- Seleccionar Vehículo -->
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">Seleccione vehículo:</label>
-                            <select class="form-select" @bind="DetalleSeleccionado.VehiculoId">
-                                <option value="0">Seleccione un vehículo</option>
-                                @foreach (var v in ListaVehiculos)
-                                {
-                                    <option value="@v.VehiculoId">
-                                        @v.MarcaVehiculo @v.ModeloVehiculo - @v.AnioFabricacion
-                                    </option>
-                                }
-                            </select>
-                        </div>
+						<div class="d-flex justify-content-between align-items-center mb-3">
+							<h4 class="fw-bold">
+								<i class="fa-solid fa-car-side text-danger"></i> Vehículos
+							</h4>
 
-                        <!-- Cantidad -->
-                        <div class="col-md-2">
-                            <label class="form-label fw-bold">Cantidad</label>
-                            <input type="number" class="form-control" @bind="DetalleSeleccionado.Cantidad" />
-                        </div>
+							<button type="button" class="btn btn-danger d-flex align-items-center gap-2"
+									@onclick="AbrirModalVehiculos">
+								<i class="fa-solid fa-car"></i> Seleccionar Vehículos
+							</button>
+						</div>
 
-                        <!-- Precio -->
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">Precio Unitario</label>
-                            <input type="number" class="form-control" @bind="DetalleSeleccionado.PrecioUnitario" />
-                        </div>
+						@if (!string.IsNullOrWhiteSpace(errorMensaje))
+						{
+							<div class="alert alert-danger">@errorMensaje</div>
+						}
+					</div>
 
-                        <!-- Agregar -->
-                        <div class="col-md-3 text-end">
-                            <button type="button" class="btn btn-success w-100 d-flex align-items-center justify-content-center gap-2"
-                                    @onclick="AgregarDetalle">
-                                <i class="fa-solid fa-plus"></i> Agregar
-                            </button>
-                        </div>
+					<hr />
 
-                    </div>
+					<!-- TABLA -->
+					<div class="table-responsive">
+						<table class="table table-striped table-hover text-center mt-3">
+							<thead class="bg-light fw-bold">
+								<tr>
+									<th>ID</th>
+									<th>Marca</th>
+									<th>Modelo</th>
+									<th>Color</th>
+									<th>Chasis</th>
+									<th>Año</th>
+									<th>Estado</th>
+									<th>Combustible</th>
+									<th>Cantidad</th>
+									<th>Precio</th>
+									<th>Sub Total</th>
+									<th>Acción</th>
+								</tr>
+							</thead>
 
-                    @if (!string.IsNullOrWhiteSpace(errorMensaje))
-                    {
-                        <div class="alert alert-danger mt-3">@errorMensaje</div>
-                    }
+							<tbody>
+								@foreach (var det in Pedido.PedidoDetalles)
+								{
+									var v = ListaVehiculos.First(x => x.VehiculoId == det.VehiculoId);
 
-                    <hr />
+									<tr>
+										<td>@v.VehiculoId</td>
+										<td>@v.MarcaVehiculo</td>
+										<td>@v.ModeloVehiculo</td>
+										<td>@v.ColorVehiculo</td>
+										<td>@v.NumeroChasis</td>
+										<td>@v.AnioFabricacion</td>
+										<td>@v.EstadoVehiculo</td>
+										<td>@v.TipoCombustible</td>
+										<td>@det.Cantidad</td>
+										<td>@det.PrecioUnitario</td>
+										<td>@(det.Cantidad* det.PrecioUnitario)</td>
+										<td>
+											<button class="btn btn-sm btn-danger"
+													@onclick="() => RemoverDetalle(det)">
+												<i class="fa-solid fa-trash"></i>
+											</button>
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
 
-                    <!-- TABLA -->
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover text-center mt-3">
-                            <thead class="bg-light fw-bold">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Marca</th>
-                                    <th>Modelo</th>
-                                    <th>Color</th>
-                                    <th>Chasis</th>
-                                    <th>Año</th>
-                                    <th>Estado</th>
-                                    <th>Combustible</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio</th>
-                                    <th>Sub Total</th>
-                                    <th>Acción</th>
-                                </tr>
-                            </thead>
+					<hr />
 
-                            <tbody>
-                                @foreach (var det in Pedido.PedidoDetalles)
-                                {
-                                    var v = ListaVehiculos.First(x => x.VehiculoId == det.VehiculoId);
+					<div class="row">
+						<div class="col-md-6">
+							<label class="form-label fw-bold">Cantidad total</label>
+							<input type="number" class="form-control" readonly
+								   value="@Pedido.PedidoDetalles.Count()" />
+						</div>
 
-                                    <tr>
-                                        <td>@v.VehiculoId</td>
-                                        <td>@v.MarcaVehiculo</td>
-                                        <td>@v.ModeloVehiculo</td>
-                                        <td>@v.ColorVehiculo</td>
-                                        <td>@v.NumeroChasis</td>
-                                        <td>@v.AnioFabricacion</td>
-                                        <td>@v.EstadoVehiculo</td>
-                                        <td>@v.TipoCombustible</td>
-                                        <td>@det.Cantidad</td>
-                                        <td>@det.PrecioUnitario</td>
-                                        <td>@(det.Cantidad* det.PrecioUnitario)</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-danger"
-                                                    @onclick="() => RemoverDetalle(det)">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+						<div class="col-md-6">
+							<label class="form-label fw-bold">Total</label>
+							<input type="number" class="form-control" readonly
+								   value="@Pedido.PedidoDetalles.Sum(p => p.Cantidad * p.PrecioUnitario)" />
+						</div>
+					</div>
+				</div>
 
-                    <hr />
+				<!-- GUARDAR -->
+				<div class="text-center mt-4">
+					<button type="submit" class="btn btn-primary px-4 d-flex align-items-center mx-auto gap-2">
+						<i class="fa-solid fa-floppy-disk"></i> Guardar
+					</button>
+				</div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Cantidad total</label>
-                            <input type="number" class="form-control" readonly
-                                   value="@Pedido.PedidoDetalles.Count()" />
-                        </div>
+			</EditForm>
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Total</label>
-                            <input type="number" class="form-control" readonly
-                                   value="@Pedido.PedidoDetalles.Sum(p => p.Cantidad * p.PrecioUnitario)" />
-                        </div>
-                    </div>
-                </div>
-
-                <!-- GUARDAR -->
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary px-4 d-flex align-items-center mx-auto gap-2">
-                        <i class="fa-solid fa-floppy-disk"></i> Guardar
-                    </button>
-                </div>
-
-            </EditForm>
-
-        </div>
-    </div>
+		</div>
+	</div>
 
 </div>
 
 @code {
-    public Pedido Pedido { get; set; } = new();
-    public List<Vehiculo> ListaVehiculos { get; set; } = new();
-    public List<Distribuidor> ListaDistribuidores { get; set; } = new();
-    public PedidoDetalle DetalleSeleccionado { get; set; } = new();
-    public string? errorMensaje;
+	public Pedido Pedido { get; set; } = new();
+	public List<Vehiculo> ListaVehiculos { get; set; } = new();
+	public List<Distribuidor> ListaDistribuidores { get; set; } = new();
+	public Vehiculo VehiculoSeleccionado { get; set; } = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        ListaVehiculos = await vehiculoService.ListarVehiculos();
-        ListaDistribuidores = await distribuidorServices.ListarDistribuidores(d => d.DistribuidorId > 0);
-        Pedido.FechaPedido = DateTime.Now;
-    }
+	public int Cantidad { get; set; }
+	public decimal Precio { get; set; }
 
-    private async Task Guardar()
-    {
-        var ok = await pedidoServices.Guardar(Pedido);
+	public string? errorMensaje;
 
-        if (ok)
-            nav.NavigateTo("/pedidos");
-        else
-            errorMensaje = "No se pudo guardar el pedido.";
-    }
+	public bool mostrarModalVehiculos = false;
+	public bool mostrarModalCantidadPrecio = false;
 
-    private async Task AgregarDetalle()
-    {
-        errorMensaje = null;
+	protected override async Task OnInitializedAsync()
+	{
+		ListaVehiculos = await vehiculoService.ListarVehiculos();
+		ListaDistribuidores = await distribuidorServices.ListarDistribuidores(d => d.DistribuidorId > 0);
+		Pedido.FechaPedido = DateTime.Now;
+	}
 
-        if (Pedido.DistribuidorId == 0)
-        {
-            errorMensaje = "Debe seleccionar un distribuidor.";
-            return;
-        }
-        if (string.IsNullOrWhiteSpace(Pedido.NombrePedido))
-        {
-            errorMensaje = "Debe escribir un nombre de pedido.";
-            return;
-        }
-        if (DetalleSeleccionado.VehiculoId == 0)
-        {
-            errorMensaje = "Debe seleccionar un vehículo.";
-            return;
-        }
-        if (DetalleSeleccionado.Cantidad <= 0)
-        {
-            errorMensaje = "Cantidad inválida.";
-            return;
-        }
-        if (DetalleSeleccionado.PrecioUnitario <= 0)
-        {
-            errorMensaje = "Precio inválido.";
-            return;
-        }
+	private async Task Guardar()
+	{
+		var ok = await pedidoServices.Guardar(Pedido);
 
-        Pedido.PedidoDetalles.Add(new PedidoDetalle
-        {
-            VehiculoId = DetalleSeleccionado.VehiculoId,
-            Cantidad = DetalleSeleccionado.Cantidad,
-            PrecioUnitario = DetalleSeleccionado.PrecioUnitario
-        });
+		if (ok)
+			nav.NavigateTo("/pedidos");
+		else
+			errorMensaje = "No se pudo guardar el pedido.";
+	}
 
-        DetalleSeleccionado = new PedidoDetalle();
+	private async Task AgregarDetalle()
+	{
+		var detalle = new PedidoDetalle
+		{
+			VehiculoId = VehiculoSeleccionado.VehiculoId,
+			Cantidad = Cantidad,
+			PrecioUnitario = Precio
+		};
 
-        await Task.CompletedTask;
-    }
+		Pedido.PedidoDetalles.Add(detalle);
+		mostrarModalCantidadPrecio = false;
+	}
 
-    private void RemoverDetalle(PedidoDetalle det)
-    {
-        Pedido.PedidoDetalles.Remove(det);
-    }
+	private void RemoverDetalle(PedidoDetalle det)
+	{
+		Pedido.PedidoDetalles.Remove(det);
+	}
+
+	private void AbrirModalVehiculos()
+	{
+		mostrarModalVehiculos = true;
+	}
+
+	public void CerrarModalVehiculos()
+	{
+		mostrarModalVehiculos = false;
+	}
+
+	public void AbrirModalCantidadPrecio(Vehiculo v)
+	{
+		VehiculoSeleccionado = v;
+		Cantidad = 1;
+		Precio = (decimal)v.Precio;
+
+		mostrarModalVehiculos = false;
+		mostrarModalCantidadPrecio = true;
+	}
+
+	public void CerrarModalCantidadPrecio()
+	{
+		mostrarModalCantidadPrecio = false;
+	}
 }
