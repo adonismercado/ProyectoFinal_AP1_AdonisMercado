@@ -75,9 +75,7 @@ public class PedidoServices(IDbContextFactory<Contexto> DbFactory)
             return false;
         }
 
-        contexto.PedidoDetalles.RemoveRange(pedido.PedidoDetalles);
-        contexto.Pedidos.Remove(pedido);
-
+        pedido.isActive = false;
         return await contexto.SaveChangesAsync() > 0;
     }
 }

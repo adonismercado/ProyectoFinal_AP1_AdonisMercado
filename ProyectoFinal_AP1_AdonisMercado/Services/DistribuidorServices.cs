@@ -65,10 +65,8 @@ public class DistribuidorServices(IDbContextFactory<Contexto> DbFactory)
         {
             return false;
         }
-        else
-        {
-            contexto.Distribuidores.Remove(distribuidor);
-            return await contexto.SaveChangesAsync() > 0;
-        }
+
+        distribuidor.isActive = false;
+        return await contexto.SaveChangesAsync() > 0;
     }
 }
