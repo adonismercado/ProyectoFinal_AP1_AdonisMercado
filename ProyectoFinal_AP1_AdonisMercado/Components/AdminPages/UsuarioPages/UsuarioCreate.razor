@@ -1,0 +1,63 @@
+﻿@page "/usuarios/create"
+@attribute [Authorize(Roles = "Admin")]
+
+@inject UserManager<ApplicationUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@inject NavigationManager nav
+@rendermode InteractiveServer
+
+@code {
+	public class UsuarioForm
+	{
+		[Required]
+		[EmailAddress]
+		public string Email { get; set; } = "";
+
+		[Required]
+		[MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres.")]
+		public string Password { get; set; } = "";
+
+		[Required]
+		public string Role { get; set; } = "User";
+	}
+
+	public UsuarioForm Form { get; set; } = new();
+	public List<string> Roles { get; set; } = new();
+	public string errorMensaje { get; set; } = "";
+
+	protected override async Task OnInitializedAsync()
+	{
+		Roles = await RoleManager.Roles
+			.Select(r => r.Name!)
+			.ToListAsync();
+	}
+
+	private async Task AgregarUsuario()
+	{
+		errorMensaje = "";
+
+		var existe = await UserManager.FindByEmailAsync(Form.Email);
+		if (existe != null)
+		{
+			errorMensaje = "Ya existe un usuario con este correo.";
+		}
+
+		var user  = new ApplicationUser
+		{
+			UserName = Form.Email,
+			Email = Form.Email,
+			EmailConfirmed = true
+		};
+
+		var result = await UserManager.CreateAsync(user, Form.Password);
+
+		if (!result.Succeeded)
+		{
+			errorMensaje = "No se pudo crear el usuario.";
+			return;
+		}
+
+		await UserManager.AddToRoleAsync(user, Form.Role);
+		nav.NavigateTo("/usuarios", forceLoad: true);
+	}
+}
