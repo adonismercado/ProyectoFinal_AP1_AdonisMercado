@@ -1,5 +1,5 @@
-﻿@page "/"
-@attribute [Authorize(Roles = "User")]
+﻿@page "/admin"
+@attribute [Authorize(Roles = "Admin")]
 @layout EmptyLayout
 
 <div class="container-fluid p-4">
@@ -11,52 +11,48 @@
     </div>
 
     <h1 class="fw-bold text-center text-dark mb-5">
-        Bienvenido al Panel De Usuario
+        Bienvenido al Panel De Administrador
     </h1>
 
     <div class="row g-4 justify-content-center">
-
-        <!-- DISTRIBUIDORES -->
+        <!-- Agregar Usuarios -->
         <div class="col-12 col-sm-6 col-lg-4">
-            <a href="/distribuidores" class="text-decoration-none">
+            <a href="/usuarios" class="text-decoration-none">
                 <div class="card shadow-lg border-0 home-card text-center">
                     <div class="card-body p-4">
                         <i class="fa-solid fa-users text-danger" style="font-size:50px;"></i>
-                        <h4 class="mt-3 fw-bold text-dark">Distribuidores</h4>
-                        <p class="text-muted">Consulta y administra los distribuidores.</p>
+                        <h4 class="mt-3 fw-bold text-dark">Usuarios</h4>
+                        <p class="text-muted">Administra los usuarios del sistema.</p>
                     </div>
                 </div>
             </a>
         </div>
 
-        <!-- PEDIDOS -->
+        <!-- Deshabilitados -->
         <div class="col-12 col-sm-6 col-lg-4">
-            <a href="/pedidos" class="text-decoration-none">
+            <a href="/deshabilitados" class="text-decoration-none">
                 <div class="card shadow-lg border-0 home-card text-center">
                     <div class="card-body p-4">
-                        <i class="fa-solid fa-cart-shopping text-danger" style="font-size:50px;"></i>
-                        <h4 class="mt-3 fw-bold text-dark">Pedidos</h4>
-                        <p class="text-muted">Administra y revisa los pedidos.</p>
+                        <i class="fa-solid fa-circle-xmark text-danger" style="font-size:50px;"></i>
+                        <h4 class="mt-3 fw-bold text-dark">Deshabilitados</h4>
+                        <p class="text-muted">Administra las entidades deshabilitadas.</p>
                     </div>
                 </div>
             </a>
         </div>
 
-        <!-- DOCUMENTOS -->
+        <!-- Vehiculos -->
         <div class="col-12 col-sm-6 col-lg-4">
-            <a href="/documentos" class="text-decoration-none">
+            <a href="/vehiculos" class="text-decoration-none">
                 <div class="card shadow-lg border-0 home-card text-center">
                     <div class="card-body p-4">
-                        <i class="fa-solid fa-file-lines text-danger" style="font-size:50px;"></i>
-                        <h4 class="mt-3 fw-bold text-dark">Documentos</h4>
-                        <p class="text-muted">Gestiona los documentos de los pedidos.</p>
+                        <i class="fa-solid fa-car text-danger" style="font-size:50px;"></i>
+                        <h4 class="mt-3 fw-bold text-dark">Veh&iacute;culos</h4>
+                        <p class="text-muted">Gestiona los veh&iacute;culos del sistema.</p>
                     </div>
                 </div>
             </a>
         </div>
 
     </div>
-
 </div>
-
-@code {}

@@ -149,7 +149,18 @@
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
-            RedirectManager.RedirectTo(ReturnUrl);
+
+            var user = await UserManager.FindByEmailAsync(Input.Email);
+            var roles = await UserManager.GetRolesAsync(user);
+
+            if (roles.Contains("Admin"))
+            {
+                NavigationManager.NavigateTo("/admin", forceLoad: true);
+                return;
+            }
+
+            NavigationManager.NavigateTo("/", forceLoad: true);
+            return;
         }
         else if (result.RequiresTwoFactor)
         {
