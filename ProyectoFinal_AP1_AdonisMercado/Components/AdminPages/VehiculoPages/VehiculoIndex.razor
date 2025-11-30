@@ -123,13 +123,13 @@
 
 								<td>
 									<div class="d-flex justify-content-center gap-2">
-										<a class="btn btn-sm btn-warning me-2 text-white"
-										   href="/vehiculos/edit/@v.VehiculoId">
-											<i class="fa-solid fa-pen-to-square"></i>
-										</a>
-
 										@if (v.isActive)
 										{
+											<a class="btn btn-sm btn-warning me-2 text-white"
+											   href="/vehiculos/edit/@v.VehiculoId">
+												<i class="fa-solid fa-pen-to-square"></i>
+											</a>
+
 											<button class="btn btn-sm btn-danger"
 													@onclick="() => AbrirDeshabilitar(v)">
 												<i class="fa-solid fa-trash"></i>
