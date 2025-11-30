@@ -1,0 +1,78 @@
+﻿@page "/documentos"
+@inject PedidoServices pedidoServices
+@inject DocumentoServices documentoServices
+@rendermode InteractiveServer
+
+@code {
+    public List<Pedido> ListaPedidos { get; set; } = new();
+    public string? Filtro { get; set; }
+    public string? ValorFiltro { get; set; }
+
+    private bool mostrarModalSubir = false;
+    private int pedidoSeleccionadoId;
+    private string TipoDocumento = "";
+    private IBrowserFile? archivoSeleccionado;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaPedidos = await pedidoServices.ListarPedidos(p => p.PedidoId > 0);
+    }
+
+    public async Task Buscar()
+    {
+        if (!string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            if (Filtro == "PedidoId" && int.TryParse(ValorFiltro, out var id))
+            {
+                ListaPedidos = await pedidoServices.ListarPedidos(p => p.PedidoId == id);
+            }
+            else if (Filtro == "NombrePedido")
+            {
+                ListaPedidos = await pedidoServices.ListarPedidos(
+                    p => p.NombrePedido.ToLower().Contains(ValorFiltro.ToLower())
+                );
+            }
+        }
+        else
+        {
+            ListaPedidos = await pedidoServices.ListarPedidos(p => p.PedidoId > 0);
+        }
+    }
+
+    public void AbrirModalSubir(int pedidoId, string tipoDoc)
+    {
+        pedidoSeleccionadoId = pedidoId;
+        TipoDocumento = tipoDoc;
+        archivoSeleccionado = null;
+        mostrarModalSubir = true;
+    }
+
+    public void CerrarModalSubir()
+    {
+        mostrarModalSubir = false;
+        archivoSeleccionado = null;
+    }
+
+    public void OnFileChange(InputFileChangeEventArgs e)
+    {
+        archivoSeleccionado = e.File;
+    }
+
+    public async Task SubirDocumento()
+    {
+        if (archivoSeleccionado == null)
+        {
+            return;
+        }
+
+        await documentoServices.Guardar(
+            archivoSeleccionado,
+            pedidoSeleccionadoId,
+            TipoDocumento
+        );
+
+        ListaPedidos = await pedidoServices.ListarPedidos(p => p.PedidoId > 0);
+
+        CerrarModalSubir();
+    }
+}
