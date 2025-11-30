@@ -17,6 +17,8 @@ public class Pedido
     [Required(ErrorMessage = "El estado es obligatorio.")]
     public string Estado { get; set; } = string.Empty;
 
+    public bool isActive { get; set; } = true;
+
     [ForeignKey("Distribuidor")]
     public int DistribuidorId { get; set; }
     [InverseProperty("Pedidos")]

@@ -46,6 +46,9 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("DistribuidorId");
 
                     b.ToTable("Distribuidores");
@@ -81,6 +84,9 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("DocumentoId");
 
                     b.HasIndex("PedidoId");
@@ -109,6 +115,9 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                     b.Property<string>("NombrePedido")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("PedidoId");
 

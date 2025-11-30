@@ -20,6 +20,8 @@ public class Distribuidor
     [Required(ErrorMessage = "El Fax es obligatorio.")]
     public string Fax { get; set; } = string.Empty;
 
+    public bool isActive { get; set; } = true;
+
     [InverseProperty("Distribuidor")]
     public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    public partial class AddIsActive : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,7 +22,8 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Telefono = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Fax = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Fax = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,6 +64,7 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                     FechaPedido = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NombrePedido = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
                     DistribuidorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -87,6 +89,7 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                     NombreOriginal = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NombreAlmacenado = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RutaDocumento = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
                     PedidoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

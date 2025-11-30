@@ -1,4 +1,6 @@
 ﻿@page "/documentos"
+@attribute [Authorize(Roles = "User")]
+
 @inject PedidoServices pedidoServices
 @inject DocumentoServices documentoServices
 @rendermode InteractiveServer

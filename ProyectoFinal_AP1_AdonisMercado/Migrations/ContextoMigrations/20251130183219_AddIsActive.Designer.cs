@@ -12,8 +12,8 @@ using ProyectoFinal_AP1_AdonisMercado.DAL;
 namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20251130044840_Inicial")]
-    partial class Inicial
+    [Migration("20251130183219_AddIsActive")]
+    partial class AddIsActive
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,9 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                     b.Property<string>("Telefono")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("DistribuidorId");
 
@@ -84,6 +87,9 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("DocumentoId");
 
                     b.HasIndex("PedidoId");
@@ -112,6 +118,9 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                     b.Property<string>("NombrePedido")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("PedidoId");
 

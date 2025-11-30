@@ -15,6 +15,8 @@ public class Documento
     public string NombreAlmacenado { get; set; } = string.Empty;
     [Required]
     public string RutaDocumento { get; set;} = string.Empty;
+    public bool isActive { get; set; } = true;
+
     [ForeignKey("Pedido")]
     public int PedidoId { get; set; }
     [InverseProperty("Documentos")]
