@@ -1,5 +1,6 @@
 ﻿@page "/vehiculos"
 @attribute [Authorize(Roles = "Admin")]
+@layout AdminLayout
 
 @inject VehiculoService vehiculoService
 @inject NavigationManager nav
