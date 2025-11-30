@@ -1,5 +1,6 @@
 ﻿@page "/deshabilitados"
 @attribute [Authorize(Roles = "Admin")]
+@layout AdminLayout
 
 @inject PedidoServices pedidoServices
 @inject DistribuidorServices distribuidorServices
