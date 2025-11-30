@@ -171,7 +171,7 @@
                                     <i class="fa fa-download"></i>
                                 </a>
                                 <button class="btn btn-sm btn-danger"
-                                        @onclick="() => EliminarDocumento(DocumentoCI.DocumentoId)">
+                                        @onclick="() => ConfirmarEliminarDocumento(DocumentoCI.DocumentoId, DocumentoCI.TipoDocumento)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>
@@ -225,7 +225,7 @@
                                     <i class="fa fa-download"></i>
                                 </a>
                                 <button class="btn btn-sm btn-danger"
-                                        @onclick="() => EliminarDocumento(DocumentoBL.DocumentoId)">
+                                        @onclick="() => ConfirmarEliminarDocumento(DocumentoBL.DocumentoId, DocumentoBL.TipoDocumento)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>
@@ -243,6 +243,54 @@
     </div>
 }
 
+@if (mostrarModalConfirmarEliminar)
+{
+    <div class="modal fade show d-block" tabindex="-1"
+         style="background-color: rgba(0,0,0,0.6);">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fa fa-exclamation-triangle me-2"></i>
+                        Confirmar Eliminación
+                    </h5>
+                    <button class="btn-close btn-close-white"
+                            @onclick="CancelarEliminar"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <p class="fw-bold fs-5">
+                        ¿Seguro que deseas eliminar este documento?
+                    </p>
+
+                    <p>
+                        <span class="badge bg-danger">
+                            @documentoTipoAEliminar
+                        </span>
+                    </p>
+
+                    <p class="text-muted">
+                        Esta acción no se puede deshacer.
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary"
+                            @onclick="CancelarEliminar">
+                        Cancelar
+                    </button>
+
+                    <button class="btn btn-danger"
+                            @onclick="EliminarDocumentoConfirmado">
+                        <i class="fa fa-trash me-1"></i> Eliminar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
 
 @code {
     public List<Pedido> ListaPedidos { get; set; } = new();
@@ -261,9 +309,12 @@
     private Documento? DocumentoCI;
     private Documento? DocumentoBL;
 
-    private int pedidoIdVer;
+    private bool mostrarModalConfirmarEliminar = false;
+    private string documentoTipoAEliminar = "";
 
+    private int pedidoIdVer;
     private int pedidoVerId;
+    private int documentoAEliminarId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -360,11 +411,30 @@
         DocumentoBL = null;
     }
 
-    public async Task EliminarDocumento(int documentoId)
+    public void ConfirmarEliminarDocumento(int documentoId, string tipoDocumento)
     {
-        await documentoServices.Eliminar(documentoId);
+        documentoAEliminarId = documentoId;
+        documentoTipoAEliminar = tipoDocumento;
+        mostrarModalConfirmarEliminar = true;
+    }
+
+    public void CancelarEliminar()
+    {
+        mostrarModalConfirmarEliminar = false;
+        documentoAEliminarId = 0;
+        documentoTipoAEliminar = "";
+    }
+
+    public async Task EliminarDocumentoConfirmado()
+    {
+        if (documentoAEliminarId <= 0)
+            return;
+
+        await documentoServices.Eliminar(documentoAEliminarId);
 
         DocumentosPedido = await documentoServices.ObtenerDocumentosPorPedido(pedidoVerId);
         ListaPedidos = await pedidoServices.ListarPedidos(p => p.PedidoId > 0);
-    }
+
+        CancelarEliminar();
+    }o
 }
