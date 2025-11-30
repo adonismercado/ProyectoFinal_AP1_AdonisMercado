@@ -1,0 +1,155 @@
+﻿@page "/pedidos/disabled"
+@attribute [Authorize(Roles = "Admin")]
+
+@inject PedidoServices pedidoServices
+@inject DistribuidorServices distribuidorServices
+@rendermode InteractiveServer
+
+<PageTitle>Deshabilitados</PageTitle>
+<div class="container-fluid py-4">
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<h2 class="fw-bold">Elementos Deshabilitados</h2>
+		<a href="/admin" class="btn btn-light">
+			<i class="fa-solid fa-house"></i> Inicio
+		</a>
+	</div>
+
+	<ul class="nav nav-tabs mb-3" id="deshabilitadosTabs">
+		<li class="nav-item">
+			<button class="nav-link @(tabSeleccionado == 0 ? "active" : "")"
+					@onclick="() => CambiarTab(0)">
+				<i class="fa fa-users"></i> Distribuidores
+			</button>
+		</li>
+
+		<li class="nav-item">
+			<button class="nav-link @(tabSeleccionado == 1 ? "active" : "")"
+					@onclick="() => CambiarTab(1)">
+				<i class="fa fa-box"></i> Pedidos
+			</button>
+		</li>
+	</ul>
+
+
+	<div class="card shadow-sm border-0">
+		<div class="card-body">
+
+			<!-- Distribuidores Deshabilitados -->
+			@if (tabSeleccionado == 0)
+			{
+				<h4 class="mb-3">Distribuidores Deshabilitados</h4>
+
+				<div class="table-responsive">
+					<table class="table table-hover text-center">
+						<thead class="table-light fw-bold">
+							<tr>
+								<th>ID</th>
+								<th>Nombre</th>
+								<th>Email</th>
+								<th>Tel&eacute;fono</th>
+								<th>Fax</th>
+								<th>Acci&oacute;n</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							@foreach (var d in ListaDistribuidores)
+							{
+								<tr>
+									<td>@d.DistribuidorId</td>
+									<td>@d.Nombre</td>
+									<td>@d.Email</td>
+									<td>@d.Telefono</td>
+									<td>@d.Fax</td>
+									<td>
+										<button class="btn btn-success btn-sm"
+												@onclick="() => HabilitarDistribuidores(d.DistribuidorId)">
+											<i class="fa fa-check"></i>
+										</button>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			}
+
+			<!-- Pedidos Deshabilitados -->
+			@if (tabSeleccionado == 1)
+			{
+				<h4 class="mb-3">Pedidos Deshabilitados</h4>
+				
+				<div class="table-responsive">
+					<table class="table table-hover text-center">
+						<thead class="table-light fw-bold">
+							<tr>
+								<th>Fecha</th>
+								<th>ID</th>
+								<th>Nombre Pedido</th>
+								<th>Estado</th>
+								<th>Distribuidor</th>
+								<th>Acci&oacute;n</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							@foreach (var p in ListaPedidos)
+							{
+								<tr>
+									<td>@p.FechaPedido.ToShortDateString()</td>
+									<td>@p.PedidoId</td>
+									<td>@p.NombrePedido</td>
+									<td>@p.Estado</td>
+									<td>@p.Distribuidor?.Nombre</td>
+									<td>
+										<button class="btn btn-success btn-sm"
+												@onclick="() => HabilitarPedido(p.PedidoId)">
+											<i class="fa fa-check"></i>	
+										</button>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+@code {
+	private int tabSeleccionado = 0;
+	public List<Pedido> ListaPedidos { get; set; } = new();
+	public List<Distribuidor> ListaDistribuidores { get; set; } = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		ListaPedidos = await pedidoServices.ListarPedidos(p => !p.isActive);
+		ListaDistribuidores = await distribuidorServices.ListarDistribuidores(d => !d.isActive);
+	}
+
+	private void CambiarTab(int index)
+	{
+		tabSeleccionado = index;
+	}
+
+	public async Task HabilitarPedido(int pedidoId)
+	{
+		var habilitado = await pedidoServices.Habilitar(pedidoId);
+
+		if (habilitado)
+		{
+			ListaPedidos = await pedidoServices.ListarPedidos(p => !p.isActive);
+		}
+	}
+
+	public async Task HabilitarDistribuidores(int distribuidorId)
+	{
+		var habilitado = await distribuidorServices.Habilitar(distribuidorId);
+
+		if (habilitado)
+		{
+			ListaDistribuidores = await distribuidorServices.ListarDistribuidores(d => !d.isActive);
+		}
+	}
+}
