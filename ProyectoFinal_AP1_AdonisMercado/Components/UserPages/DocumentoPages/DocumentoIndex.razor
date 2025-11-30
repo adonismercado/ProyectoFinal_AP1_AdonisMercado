@@ -135,6 +135,10 @@
     private string TipoDocumento = "";
     private IBrowserFile? archivoSeleccionado;
 
+    private bool mostrarModalVer = false;
+    private List<Documento> DocumentosPedido = new();
+    private int pedidoVerId;
+
     protected override async Task OnInitializedAsync()
     {
         ListaPedidos = await pedidoServices.ListarPedidos(p => p.PedidoId > 0);
@@ -197,4 +201,18 @@
 
         CerrarModalSubir();
     }
+
+    public async Task AbrirModalVer(int pedidoId)
+    {
+        pedidoVerId = pedidoId;
+        DocumentosPedido = await documentoServices.ObtenerDocumentosPorPedido(pedidoId);
+        mostrarModalVer = true;
+    }
+
+    public void CerrarModalVer()
+    {
+        mostrarModalVer = false;
+        DocumentosPedido.Clear();
+    }
+
 }
