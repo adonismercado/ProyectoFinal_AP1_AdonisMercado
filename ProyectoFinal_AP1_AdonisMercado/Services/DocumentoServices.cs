@@ -1,66 +1,72 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.EntityFrameworkCore;
 using ProyectoFinal_AP1_AdonisMercado.DAL;
 using ProyectoFinal_AP1_AdonisMercado.Models;
 using System.Linq.Expressions;
 
 namespace ProyectoFinal_AP1_AdonisMercado.Services;
 
-public class DocumentoServices(IDbContextFactory<Contexto> DbFactory)
+public class DocumentoServices(IDbContextFactory<Contexto> dbFactory, IWebHostEnvironment env)
 {
-    public async Task<bool> Existe(int documentoId)
+    public async Task<List<Documento>> ObtenerDocsPorPedido(int pedidoId)
     {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
+        await using var contexto = await dbFactory.CreateDbContextAsync();
         return await contexto.Documentos
-            .AnyAsync(d => d.DocumentoId == documentoId);
+            .Where(d => d.PedidoId == pedidoId)
+            .ToListAsync();
     }
 
-    private async Task<bool> Insertar(Documento documento)
+    public async Task GuardarDocumento(int pedidoId, string tipoDocumento, DateTime fechaEmision, IBrowserFile archivo)
     {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
+        var extension = Path.GetExtension(archivo.Name).ToLower();
+        var permitidos = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
+
+        if (!permitidos.Contains(extension))
+        {
+            throw new Exception("Tipo de archivo no permitido.");
+        }
+
+        string nombreUnico = $"{Guid.NewGuid()}{extension}";
+
+        string carpeta = Path.Combine(env.WebRootPath, "documentos_pedidos");
+
+        if (!Directory.Exists(carpeta))
+        {
+            Directory.CreateDirectory(carpeta);
+        }
+
+        string rutaFisica = Path.Combine(carpeta, nombreUnico);
+
+        using var stream = new FileStream(rutaFisica, FileMode.Create);
+        await archivo.OpenReadStream(maxAllowedSize: 20_000_000).CopyToAsync(stream);
+
+        var documento = new Documento
+        {
+            PedidoId = pedidoId,
+            TipoDocumento = tipoDocumento,
+            FechaEmision = fechaEmision,
+            NombreOriginal = archivo.Name,
+            NombreAlmacenado = nombreUnico,
+            RutaDocumento = $"documentos_pedidos/{nombreUnico}",
+            ContentType = archivo.ContentType
+        };
+
+        await using var contexto = await dbFactory.CreateDbContextAsync();
         contexto.Documentos.Add(documento);
-        return await contexto.SaveChangesAsync() > 0;
+        await contexto.SaveChangesAsync();
     }
 
-    private async Task<bool> Modificar(Documento documento)
+    public async Task<List<Documento>> ListarDocumentos(Expression<Func<Documento, bool>> criterio)
     {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
-        contexto.Documentos.Update(documento);
-        return await contexto.SaveChangesAsync() > 0;
-    }
-
-    public async Task<bool> Guardar(Documento documento)
-    {
-        if (!await Existe(documento.DocumentoId))
-        {
-            return await Insertar(documento);
-        }
-        else
-        {
-            return await Modificar(documento);
-        }
-    }
-
-    public async Task<Documento?> Buscar(int documentoId)
-    {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
+        await using var contexto = await dbFactory.CreateDbContextAsync();
         return await contexto.Documentos
-            .Include(d => d.Pedido)
-            .FirstOrDefaultAsync(d => d.DocumentoId == documentoId);
-    }
-
-    public async Task<List<Documento>> Listar(Expression<Func<Documento, bool>> criterio)
-    {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
-
-        return await contexto.Documentos
-            .Include(d => d.Pedido)
             .Where(criterio)
             .ToListAsync();
     }
 
     public async Task<bool> Eliminar(int documentoId)
     {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
+        await using var contexto = await dbFactory.CreateDbContextAsync();
 
         var documento = await contexto.Documentos
             .FirstOrDefaultAsync(d => d.DocumentoId == documentoId);
@@ -69,8 +75,21 @@ public class DocumentoServices(IDbContextFactory<Contexto> DbFactory)
         {
             return false;
         }
+        else
+        {
+            string ruta = Path.Combine(env.WebRootPath, documento.RutaDocumento);
 
-        contexto.Documentos.Remove(documento);
-        return await contexto.SaveChangesAsync() > 0;
+            if (File.Exists(ruta))
+            {
+                try
+                {
+                    File.Delete(ruta);
+                }
+                catch { }
+            }
+
+            contexto.Documentos.Remove(documento);
+            return await contexto.SaveChangesAsync() > 0;
+        }
     }
 }
