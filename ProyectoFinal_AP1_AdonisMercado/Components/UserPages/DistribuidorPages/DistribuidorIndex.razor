@@ -191,7 +191,7 @@
 
     public async Task EliminarDistribuidor()
     {
-        var ok = await distribuidorServices.Eliminar(DistribuidorIdAEliminar);
+        var ok = await distribuidorServices.Deshabilitar(DistribuidorIdAEliminar);
 
         if (ok)
             ListaDistribuidores = await distribuidorServices.ListarDistribuidores(d => d.DistribuidorId > 0);

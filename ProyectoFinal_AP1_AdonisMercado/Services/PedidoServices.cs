@@ -61,7 +61,7 @@ public class PedidoServices(IDbContextFactory<Contexto> DbFactory)
             .ToListAsync();
     }
 
-    public async Task<bool> Eliminar(int pedidoId)
+    public async Task<bool> Deshabilitar(int pedidoId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         var pedido = await contexto.Pedidos
@@ -76,6 +76,24 @@ public class PedidoServices(IDbContextFactory<Contexto> DbFactory)
         }
 
         pedido.isActive = false;
+        return await contexto.SaveChangesAsync() > 0;
+    }
+
+    public async Task<bool> Habilitar(int pedidoId)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        var pedido = await contexto.Pedidos
+            .Include(p => p.PedidoDetalles)
+            .Include(p => p.Documentos)
+            .Include(p => p.Distribuidor)
+            .FirstOrDefaultAsync(p => p.PedidoId == pedidoId);
+
+        if (pedido == null)
+        {
+            return false;
+        }
+
+        pedido.isActive = true;
         return await contexto.SaveChangesAsync() > 0;
     }
 }

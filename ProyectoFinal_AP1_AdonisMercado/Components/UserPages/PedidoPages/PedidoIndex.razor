@@ -239,7 +239,7 @@
 
     public async Task EliminarPedido()
     {
-        var ok = await pedidoServices.Eliminar(PedidoIdAEliminar);
+        var ok = await pedidoServices.Deshabilitar(PedidoIdAEliminar);
 
         if (ok)
             ListaPedidos = await pedidoServices.ListarPedidos(d => d.PedidoId > 0);

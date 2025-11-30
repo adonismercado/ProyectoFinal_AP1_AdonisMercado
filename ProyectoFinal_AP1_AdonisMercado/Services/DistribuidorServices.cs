@@ -56,7 +56,7 @@ public class DistribuidorServices(IDbContextFactory<Contexto> DbFactory)
             .ToListAsync();
     }
 
-    public async Task<bool> Eliminar(int distribuidorId)
+    public async Task<bool> Deshabilitar(int distribuidorId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         var distribuidor = await Buscar(distribuidorId);
@@ -67,6 +67,20 @@ public class DistribuidorServices(IDbContextFactory<Contexto> DbFactory)
         }
 
         distribuidor.isActive = false;
+        return await contexto.SaveChangesAsync() > 0;
+    }
+
+    public async Task<bool> Habilitar(int distribuidorId)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        var distribuidor = await Buscar(distribuidorId);
+
+        if (distribuidor == null)
+        {
+            return false;
+        }
+
+        distribuidor.isActive = true;
         return await contexto.SaveChangesAsync() > 0;
     }
 }
