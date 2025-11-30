@@ -1,4 +1,4 @@
-﻿@page "/pedidos/disabled"
+﻿@page "/deshabilitados"
 @attribute [Authorize(Roles = "Admin")]
 
 @inject PedidoServices pedidoServices
@@ -7,12 +7,24 @@
 
 <PageTitle>Deshabilitados</PageTitle>
 <div class="container-fluid py-4">
-	<div class="d-flex justify-content-between align-items-center mb-4">
-		<h2 class="fw-bold">Elementos Deshabilitados</h2>
-		<a href="/admin" class="btn btn-light">
-			<i class="fa-solid fa-house"></i> Inicio
-		</a>
-	</div>
+	@if (tabSeleccionado == 0)
+	{
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<h2 class="fw-bold">Distribuidores Deshabilitados</h2>
+			<a href="/admin" class="btn btn-light">
+				<i class="fa-solid fa-house"></i> Inicio
+			</a>
+		</div>
+	}
+	else if (tabSeleccionado == 1)
+	{
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<h2 class="fw-bold">Pedidos Deshabilitados</h2>
+			<a href="/admin" class="btn btn-light">
+				<i class="fa-solid fa-house"></i> Inicio
+			</a>
+		</div>
+	}
 
 	<ul class="nav nav-tabs mb-3" id="deshabilitadosTabs">
 		<li class="nav-item">
@@ -37,8 +49,6 @@
 			<!-- Distribuidores Deshabilitados -->
 			@if (tabSeleccionado == 0)
 			{
-				<h4 class="mb-3">Distribuidores Deshabilitados</h4>
-
 				<div class="table-responsive">
 					<table class="table table-hover text-center">
 						<thead class="table-light fw-bold">
@@ -63,8 +73,12 @@
 									<td>@d.Fax</td>
 									<td>
 										<button class="btn btn-success btn-sm"
-												@onclick="() => HabilitarDistribuidores(d.DistribuidorId)">
+												@onclick="() => HabilitarDistribuidor(d.DistribuidorId)">
 											<i class="fa fa-check"></i>
+										</button>
+										<button class="btn btn-danger btn-sm"
+												@onclick="() => EliminarDistribuidor(d.DistribuidorId)">
+											<i class="fa-solid fa-trash"></i>
 										</button>
 									</td>
 								</tr>
@@ -77,8 +91,6 @@
 			<!-- Pedidos Deshabilitados -->
 			@if (tabSeleccionado == 1)
 			{
-				<h4 class="mb-3">Pedidos Deshabilitados</h4>
-				
 				<div class="table-responsive">
 					<table class="table table-hover text-center">
 						<thead class="table-light fw-bold">
@@ -105,6 +117,10 @@
 										<button class="btn btn-success btn-sm"
 												@onclick="() => HabilitarPedido(p.PedidoId)">
 											<i class="fa fa-check"></i>	
+										</button>
+										<button class="btn btn-danger btn-sm"
+												@onclick="() => EliminarPedido(p.PedidoId)">
+											<i class="fa-solid fa-trash"></i>
 										</button>
 									</td>
 								</tr>
@@ -143,11 +159,31 @@
 		}
 	}
 
-	public async Task HabilitarDistribuidores(int distribuidorId)
+	public async Task HabilitarDistribuidor(int distribuidorId)
 	{
 		var habilitado = await distribuidorServices.Habilitar(distribuidorId);
 
 		if (habilitado)
+		{
+			ListaDistribuidores = await distribuidorServices.ListarDistribuidores(d => !d.isActive);
+		}
+	}
+
+	public async Task EliminarPedido(int pedidoId)
+	{
+		var eliminado = await pedidoServices.Eliminar(pedidoId);
+
+		if (eliminado)
+		{
+			ListaPedidos = await pedidoServices.ListarPedidos(p => !p.isActive);
+		}
+	}
+
+	public async Task EliminarDistribuidor(int distribuidorId)
+	{
+		var eliminado = await distribuidorServices.Eliminar(distribuidorId);
+
+		if (eliminado)
 		{
 			ListaDistribuidores = await distribuidorServices.ListarDistribuidores(d => !d.isActive);
 		}

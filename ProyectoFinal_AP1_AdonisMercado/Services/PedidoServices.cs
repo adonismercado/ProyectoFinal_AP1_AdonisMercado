@@ -96,4 +96,23 @@ public class PedidoServices(IDbContextFactory<Contexto> DbFactory)
         pedido.isActive = true;
         return await contexto.SaveChangesAsync() > 0;
     }
+
+    public async Task<bool> Eliminar(int pedidoId)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        var pedido = await contexto.Pedidos
+            .Include(p => p.PedidoDetalles)
+            .Include(p => p.Documentos)
+            .Include(p => p.Distribuidor)
+            .FirstOrDefaultAsync(p => p.PedidoId == pedidoId);
+
+        if (pedido == null)
+        {
+            return false;
+        }
+
+        contexto.PedidoDetalles.RemoveRange(pedido.PedidoDetalles);
+        contexto.Pedidos.Remove(pedido);
+        return await contexto.SaveChangesAsync() > 0;
+    }
 }

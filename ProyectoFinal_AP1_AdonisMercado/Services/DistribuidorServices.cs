@@ -59,7 +59,9 @@ public class DistribuidorServices(IDbContextFactory<Contexto> DbFactory)
     public async Task<bool> Deshabilitar(int distribuidorId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        var distribuidor = await Buscar(distribuidorId);
+        var distribuidor = await contexto.Distribuidores
+            .Include(d => d.Pedidos)
+            .FirstOrDefaultAsync(d => d.DistribuidorId == distribuidorId);
 
         if (distribuidor == null)
         {
@@ -73,7 +75,9 @@ public class DistribuidorServices(IDbContextFactory<Contexto> DbFactory)
     public async Task<bool> Habilitar(int distribuidorId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        var distribuidor = await Buscar(distribuidorId);
+        var distribuidor = await contexto.Distribuidores
+            .Include(d => d.Pedidos)
+            .FirstOrDefaultAsync(d => d.DistribuidorId == distribuidorId);
 
         if (distribuidor == null)
         {
@@ -81,6 +85,22 @@ public class DistribuidorServices(IDbContextFactory<Contexto> DbFactory)
         }
 
         distribuidor.isActive = true;
+        return await contexto.SaveChangesAsync() > 0;
+    }
+
+    public async Task<bool> Eliminar(int distribuidorId)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        var distribuidor = await contexto.Distribuidores
+            .Include(d => d.Pedidos)
+            .FirstOrDefaultAsync(d => d.DistribuidorId == distribuidorId);
+
+        if (distribuidor == null)
+        {
+            return false;
+        }
+
+        contexto.Distribuidores.Remove(distribuidor);
         return await contexto.SaveChangesAsync() > 0;
     }
 }
