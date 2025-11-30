@@ -62,8 +62,20 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                     b.Property<DateTime>("FechaEmision")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("NombreAlmacenado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NombreOriginal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PedidoId")
                         .HasColumnType("int");
+
+                    b.Property<string>("RutaDocumento")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TipoDocumento")
                         .IsRequired()

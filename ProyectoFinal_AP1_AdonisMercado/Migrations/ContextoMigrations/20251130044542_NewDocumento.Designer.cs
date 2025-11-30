@@ -12,8 +12,8 @@ using ProyectoFinal_AP1_AdonisMercado.DAL;
 namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20251130043721_DocumentoNullable")]
-    partial class DocumentoNullable
+    [Migration("20251130044542_NewDocumento")]
+    partial class NewDocumento
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,10 +61,6 @@ namespace ProyectoFinal_AP1_AdonisMercado.Migrations.ContextoMigrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentoId"));
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("FechaEmision")
                         .HasColumnType("datetime2");
