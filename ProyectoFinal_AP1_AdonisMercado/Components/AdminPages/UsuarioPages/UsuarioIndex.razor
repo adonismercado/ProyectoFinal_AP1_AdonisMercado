@@ -1,4 +1,5 @@
 ﻿@page "/usuarios"
+@layout AdminLayout
 
 @attribute [Authorize(Roles = "Admin")]
 @inject UserManager<ApplicationUser> UserManager
