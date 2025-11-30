@@ -3,6 +3,128 @@
 @inject DocumentoServices documentoServices
 @rendermode InteractiveServer
 
+<PageTitle>Documentos</PageTitle>
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Documentos</h2>
+
+        <a href="/" class="btn btn-light d-flex align-items-center gap-2">
+            <i class="fa-solid fa-house"></i> Inicio
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Filtrar Por:</label>
+                    <select class="form-select" @bind="Filtro">
+                        <option value="" disabled selected>Seleccione</option>
+                        <option value="PedidoId">Pedido ID</option>
+                        <option value="NombrePedido">Nombre Pedido</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Buscar</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
+                        <button class="btn btn-danger" @onclick="Buscar">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body px-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr class="text-center fw-bold">
+                            <th>Pedido ID</th>
+                            <th>Nombre Pedido</th>
+                            <th>Commercial Invoice</th>
+                            <th>Bill of Lading (B/L)</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var pedido in ListaPedidos)
+                        {
+                            <tr class="text-center">
+                                <td>@pedido.PedidoId</td>
+                                <td>@pedido.NombrePedido</td>
+
+                                <td>
+                                    <button type="button"
+                                            class="btn btn-sm btn-success"
+                                            @onclick="@(() => AbrirModalSubir(pedido.PedidoId, "Commercial Invoice"))">
+                                        <i class="fa fa-upload"></i>
+                                    </button>
+                                </td>
+
+                                <td>
+                                    <button type="button"
+                                            class="btn btn-sm btn-success"
+                                            @onclick="@(() => AbrirModalSubir(pedido.PedidoId, "Bill of Lading"))">
+                                        <i class="fa fa-upload"></i>
+                                    </button>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (mostrarModalSubir)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.6);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa fa-upload me-2"></i> Subir @TipoDocumento
+                    </h5>
+                    <button class="btn-close" @onclick="CerrarModalSubir"></button>
+                </div>
+
+                <div class="modal-body">
+                    <label class="form-label fw-bold">Archivo</label>
+                    <InputFile OnChange="OnFileChange"
+                               accept=".pdf,.jpg,.jpeg,.png"
+                               class="form-control" />
+                    <small class="text-muted">
+                        Permitido: PDF, JPG, JPEG, PNG - Máx 10MB
+                    </small>
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-secondary" @onclick="CerrarModalSubir">
+                        Cancelar
+                    </button>
+
+                    <button class="btn btn-danger"
+                            @onclick="SubirDocumento"
+                            disabled="@(archivoSeleccionado == null)">
+                        <i class="fa-solid fa-cloud-upload-alt me-1"></i>
+                        Subir
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
     public List<Pedido> ListaPedidos { get; set; } = new();
     public string? Filtro { get; set; }
