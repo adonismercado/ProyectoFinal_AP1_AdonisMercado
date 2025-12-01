@@ -1,2 +1,66 @@
 ﻿@page "/vehiculos/edit/{id:int}"
+@attribute [Authorize(Roles = "Admin")]
+@layout EmptyLayout
 
+@inject VehiculoService vehiculoService
+@inject NavigationManager nav
+@inject IWebHostEnvironment env
+@rendermode InteractiveServer
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    public Vehiculo Vehiculo { get; set; } = new();
+    private IBrowserFile? ImagenArchivo;
+    private string? ImagenActual;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Vehiculo = await vehiculoService.Buscar(id);
+
+        if (Vehiculo == null)
+        {
+            nav.NavigateTo("/vehiculos", forceLoad: true);
+            return;
+        }
+
+        ImagenActual = Vehiculo.ImagenUrl;
+    }
+
+    private async Task OnImagenSelected(InputFileChangeEventArgs e)
+    {
+        ImagenArchivo = e.File;
+    }
+
+    private async Task GuardarCambios()
+    {
+        await vehiculoService.Modificar(Vehiculo);
+
+        if (ImagenArchivo == null)
+        {
+            nav.NavigateTo("/vehiculos", forceLoad: true);
+            return;
+        }
+
+        string folder = Path.Combine(env.WebRootPath, "vehiculos");
+
+        if (!Directory.Exists(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
+
+        string extension = Path.GetExtension(ImagenArchivo.Name).ToLower();
+        string nombreArchivo = $"{Vehiculo.VehiculoId}{extension}";
+        string path = Path.Combine(folder, nombreArchivo);
+
+        await using (var stream = File.Create(path))
+        {
+            await ImagenArchivo.OpenReadStream().CopyToAsync(stream);
+        }
+
+        string ruta = $"/vehiculos/{nombreArchivo}";
+        await vehiculoService.ActualizarImagen(Vehiculo.VehiculoId, ruta);
+
+        nav.NavigateTo("/vehiculos", forceLoad: true);
+    }
+}
