@@ -6,6 +6,7 @@
 @inject PedidoServices pedidoServices
 @inject DistribuidorServices distribuidorServices
 @inject NavigationManager nav
+@inject ToastService toastService
 @rendermode InteractiveServer
 
 <PageTitle>Editar Pedido</PageTitle>
@@ -377,9 +378,15 @@
         var ok = await pedidoServices.Guardar(Pedido);
 
         if (ok)
+        {
+            toastService.ShowSuccess("Pedido modificado exitosamente!");
             nav.NavigateTo("/pedidos");
+        }
         else
+        {
+            toastService.ShowError("No se pudo guardar el pedido.");
             errorMensaje = "No se pudo guardar el pedido.";
+        }
     }
 
 
