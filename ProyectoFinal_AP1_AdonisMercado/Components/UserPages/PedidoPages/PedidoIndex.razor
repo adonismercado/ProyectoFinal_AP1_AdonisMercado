@@ -3,6 +3,7 @@
 @attribute [Authorize(Roles = "User")]
 @inject PedidoServices pedidoServices
 @inject NavigationManager nav
+@inject ToastService toastService
 @rendermode InteractiveServer
 
 <PageTitle>Pedidos</PageTitle>
@@ -282,7 +283,14 @@
         var ok = await pedidoServices.Deshabilitar(PedidoIdAEliminar);
 
         if (ok)
+        {
+            toastService.ShowSuccess("Pedido eliminado exitosamente!");
             ListaPedidos = await pedidoServices.ListarPedidos(d => d.PedidoId > 0 && d.isActive);
+        }
+        else
+        {
+            toastService.ShowError("No se pudo eliminar el pedido.");
+        }
 
         CerrarModal();
     }
@@ -316,7 +324,12 @@
 
         if (enviado)
         {
+            toastService.ShowSuccess("Pedido enviado exitosamente!");
             ListaPedidos = await pedidoServices.ListarPedidos(p => p.isActive);
+        }
+        else
+        {
+            toastService.ShowError("No se pudo enviar el pedido.");
         }
 
         CerrarEnviar();
