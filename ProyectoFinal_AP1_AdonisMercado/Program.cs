@@ -37,6 +37,7 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddBlazorBootstrap();
 builder.Services.AddScoped<DistribuidorServices>();
 builder.Services.AddScoped<PedidoServices>();
 builder.Services.AddScoped<DocumentoServices>();
