@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace ProyectoFinal_AP1_AdonisMercado.Extensors;
 
-public class ToastServiceExtensions
+public static class ToastServiceExtensions
 {
     public static ToastMessage ShowToast(this ToastService toastService, ToastType toastType, string title, string customMessage = null)
     {
@@ -14,5 +14,10 @@ public class ToastServiceExtensions
         };
         toastService.Notify(message);
         return message;
+    }
+
+    public static ToastMessage ShowSuccess(this ToastService toastService, string customMessage = null, string title = "Success")
+    {
+        return toastService.ShowToast(ToastType.Success, title, customMessage);
     }
 }
