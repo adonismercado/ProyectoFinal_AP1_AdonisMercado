@@ -87,8 +87,13 @@
         var creado = await distribuidorServices.Guardar(Distribuidor);
 
         if (creado)
+        {
+            toastService.ShowSuccess("Distribuidor creado correctamente.");
             nav.NavigateTo("/distribuidores");
+        }
         else
-            errorMensaje = "No se pudo guardar el distribuidor.";
+        {
+            toastService.ShowError("No se pudo guardar el distribuidor.");
+        }
     }
 }
