@@ -94,14 +94,6 @@
 					<input type="number" class="form-control" @bind="Vehiculo.Precio" />
 				</div>
 
-				<div class="mb-2">
-					<label class="form-label fw-bold">Imagen Actual</label><br />
-					@if (!string.IsNullOrEmpty(ImagenActual))
-					{
-						<img src="@ImagenActual" alt="Imagen Actual" class="img-thumbnail mb-2" width="200" />
-					}
-				</div>
-
 				<div class="col-md-12">
 					<label class="form-label fw-bold">Cambiar Imagen</label>
 					<InputFile class="form-control"
