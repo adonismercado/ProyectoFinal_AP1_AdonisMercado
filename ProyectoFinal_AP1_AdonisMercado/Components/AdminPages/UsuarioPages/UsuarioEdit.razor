@@ -5,6 +5,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject RoleManager<IdentityRole> RoleManager
 @inject NavigationManager nav
+@inject ToastService toastService
 @rendermode InteractiveServer
 
 <PageTitle>Editar Usuario</PageTitle>
@@ -107,6 +108,7 @@
     {
         if (usuario == null)
         {
+            toastService.ShowError("Usuario no encontrado.");
             errorMensaje = "Usuario no encontrado.";
             return;
         }
@@ -117,6 +119,7 @@
         var result = await UserManager.UpdateAsync(usuario);
         if (!result.Succeeded)
         {
+            toastService.ShowError("Error al editar el usuario.");
             errorMensaje = "Error al editar el usuario.";
             return;
         }
@@ -132,11 +135,13 @@
 
             if (!passResult.Succeeded)
             {
+                toastService.ShowError("Error al intentar cambiar la contraseña");
                 errorMensaje = "Error al intentar cambiar la contraseña.";
                 return;
             }
         }
 
+        toastService.ShowSuccess("Usuario modificado exitosamente!");
         nav.NavigateTo("/usuarios", forceLoad: true);
     } 
 }
