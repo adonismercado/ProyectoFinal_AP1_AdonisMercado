@@ -272,4 +272,16 @@
     {
         mostrarEnviar = false;
     }
+
+    public async Task EnviarPedido()
+    {
+        var enviado = await pedidoServices.EnviarPedido(PedidoIdAEnviar);
+
+        if (enviado)
+        {
+            ListaPedidos = await pedidoServices.ListarPedidos(p => p.isActive);
+        }
+
+        CerrarEnviar();
+    }
 }
