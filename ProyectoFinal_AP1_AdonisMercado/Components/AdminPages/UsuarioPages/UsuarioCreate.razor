@@ -5,6 +5,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject RoleManager<IdentityRole> RoleManager
 @inject NavigationManager nav
+@inject ToastService toastService
 @rendermode InteractiveServer
 
 <PageTitle>Crear Usuario</PageTitle>
@@ -92,6 +93,7 @@
 		var existe = await UserManager.FindByEmailAsync(Form.Email);
 		if (existe != null)
 		{
+			toastService.ShowWarning("Ya existe un usuario con este correo");
 			errorMensaje = "Ya existe un usuario con este correo.";
 			return;
 		}
@@ -107,11 +109,13 @@
 
 		if (!result.Succeeded)
 		{
+			toastService.ShowError("No se pudo crear el usuario.");
 			errorMensaje = "No se pudo crear el usuario.";
 			return;
 		}
 
 		await UserManager.AddToRoleAsync(user, Form.Role);
+		toastService.ShowSuccess("Usuario creado exitosamente!");
 		nav.NavigateTo("/usuarios", forceLoad: true);
 	}
 }
