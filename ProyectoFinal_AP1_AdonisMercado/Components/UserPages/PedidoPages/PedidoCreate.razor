@@ -6,6 +6,7 @@
 @inject PedidoServices pedidoServices
 @inject DistribuidorServices distribuidorServices
 @inject NavigationManager nav
+@inject ToastService toastService
 @rendermode InteractiveServer
 
 <PageTitle>Crear Pedido</PageTitle>
@@ -375,9 +376,15 @@
 		var ok = await pedidoServices.Guardar(Pedido);
 
 		if (ok)
-			nav.NavigateTo("/pedidos");
+		{
+			toastService.ShowSuccess("Pedido creado exitosamente!");
+			nav.NavigateTo("/pedidos");			
+		}
 		else
-			errorMensaje = "No se pudo guardar el pedido.";
+		{
+			toastService.ShowError("No se pudo crear el pedido.");
+			errorMensaje = "No se pudo crear el pedido.";
+		}
 	}
 
 	private async Task AgregarDetalle()
