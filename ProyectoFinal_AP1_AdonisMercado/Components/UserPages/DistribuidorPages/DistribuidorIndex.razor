@@ -3,6 +3,7 @@
 @attribute [Authorize(Roles = "User")]
 @inject DistribuidorServices distribuidorServices
 @inject NavigationManager navigationManager
+@inject ToastService toastService
 @rendermode InteractiveServer
 
 <PageTitle>Distribuidores</PageTitle>
@@ -261,7 +262,14 @@
         var ok = await distribuidorServices.Deshabilitar(DistribuidorIdAEliminar);
 
         if (ok)
+        {
+            toastService.ShowSuccess("Distribuidor eliminado correctamente!");
             ListaDistribuidores = await distribuidorServices.ListarDistribuidores(d => d.isActive);
+        }
+        else
+        {
+            toastService.ShowError("No se pudo eliminar el distribuidor.");
+        }
 
         CerrarModal();
     }
