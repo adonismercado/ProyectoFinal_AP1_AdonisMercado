@@ -23,7 +23,7 @@ public class VehiculoService(IDbContextFactory<Contexto> DbFactory)
         return vehiculo.VehiculoId;
     }
 
-    private async Task<bool> Modificar(Vehiculo vehiculo)
+    public async Task<bool> Modificar(Vehiculo vehiculo)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         contexto.Vehiculos.Update(vehiculo);
