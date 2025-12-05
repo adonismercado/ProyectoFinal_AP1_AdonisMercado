@@ -3,30 +3,37 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 
-<div class="list-group">
+<div class="ms-5">
 
-    <NavLink class="list-group-item list-group-item-action" href="Account/Manage" Match="NavLinkMatch.All">
-        <i class="fa-solid fa-user align-middle me-2"></i> Perfil
-    </NavLink>
+    <div class="list-group shadow-sm">
 
-    <NavLink class="list-group-item list-group-item-action" href="Account/Manage/Email">
-        <i class="fa-solid fa-envelope align-middle me-2"></i> Email
-    </NavLink>
-
-    <NavLink class="list-group-item list-group-item-action" href="Account/Manage/ChangePassword">
-        <i class="fa-solid fa-lock align-middle me-2"></i> Contraseña
-    </NavLink>
-
-    @if (hasExternalLogins)
-    {
-        <NavLink class="list-group-item list-group-item-action" href="Account/Manage/ExternalLogins">
-            <i class="fa-solid fa-globe align-middle me-2"></i> Logins externos
+        <NavLink class="list-group-item list-group-item-action py-3"
+                 href="Account/Manage" Match="NavLinkMatch.All">
+            <i class="fa-solid fa-user me-3 text-danger"></i>
+            <span class="fw-semibold">Perfil</span>
         </NavLink>
-    }
 
-    <NavLink class="list-group-item list-group-item-action" href="Account/Manage/Passkeys">
-        <i class="fa-solid fa-key align-middle me-2"></i> Passkeys
-    </NavLink>
+        <NavLink class="list-group-item list-group-item-action py-3"
+                 href="Account/Manage/Email">
+            <i class="fa-solid fa-envelope me-3 text-danger"></i>
+            <span class="fw-semibold">Email</span>
+        </NavLink>
+
+        <NavLink class="list-group-item list-group-item-action py-3"
+                 href="Account/Manage/ChangePassword">
+            <i class="fa-solid fa-lock me-3 text-danger"></i>
+            <span class="fw-semibold">Contraseña</span>
+        </NavLink>
+
+        @if (hasExternalLogins)
+        {
+            <NavLink class="list-group-item list-group-item-action py-3"
+                     href="Account/Manage/ExternalLogins">
+                <i class="fa-solid fa-globe me-3 text-danger"></i>
+                <span class="fw-semibold">Logins externos</span>
+            </NavLink>
+        }
+    </div>
 
 </div>
 
@@ -35,6 +42,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+        hasExternalLogins = (await SignInManager
+            .GetExternalAuthenticationSchemesAsync()).Any();
     }
 }
+
+<style>
+    .list-group-item.active {
+        background-color: #BD1717 !important;
+        border-color: #BD1717 !important;
+        color: white !important;
+    }
+
+        .list-group-item.active i {
+            color: white !important;
+        }
+</style>
