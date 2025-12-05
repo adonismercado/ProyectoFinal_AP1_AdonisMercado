@@ -14,88 +14,69 @@
 
 <PageTitle>Iniciar sesión</PageTitle>
 
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="col-md-5">
+<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 80vh;">
 
-        <div class="card shadow-lg">
-            <div class="text-center mt-4">
-                <img src="images/auto-franklin-logo-removebg-preview.png"
-                     alt="Logo"
-                     class="img-fluid"
-                     style="max-height: 150px;" />
-            </div>
-            <div class="card-header text-center">
-                <h5 class="card-title mb-0">Iniciar sesión</h5>
-            </div>
+    <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%; border-radius:15px;">
 
-            <div class="card-body">
-
-                <StatusMessage Message="@errorMessage" />
-
-                <EditForm EditContext="editContext" method="post" OnSubmit="LoginUser" FormName="Login">
-                    <DataAnnotationsValidator />
-
-                    <div class="mb-3">
-                        <label for="Input.Email" class="form-label">Correo electrónico</label>
-                        <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control"
-                                   autocomplete="username webauthn" placeholder="ejemplo@gmail.com" />
-                        <ValidationMessage For="() => Input.Email" class="text-danger" />
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="Input.Password" class="form-label">Contraseña</label>
-                        <InputText type="password" @bind-Value="Input.Password"
-                                   id="Input.Password" class="form-control"
-                                   autocomplete="current-password" placeholder="••••••••" />
-                        <ValidationMessage For="() => Input.Password" class="text-danger" />
-                    </div>
-
-                    <div class="form-check mb-3">
-                        <InputCheckbox @bind-Value="Input.RememberMe"
-                                       class="form-check-input" id="rememberCheck" />
-                        <label class="form-check-label" for="rememberCheck">
-                            Recordarme
-                        </label>
-                    </div>
-
-                    <button type="submit" class="btn btn-danger w-100">
-                        Iniciar sesión
-                    </button>
-
-                    <div class="d-flex justify-content-center mt-3">
-                        <PasskeySubmit Operation="PasskeyOperation.Request"
-                                       Name="Input.Passkey"
-                                       EmailName="Input.Email"
-                                       class="btn btn-outline-secondary">
-                            Iniciar con Passkey
-                        </PasskeySubmit>
-                    </div>
-
-                </EditForm>
-
-                <hr />
-
-                <div class="mt-4 text-center">
-                    <p><a href="/Account/ForgotPassword" class="text-decoration-none text-danger">¿Olvidaste tu contraseña?</a></p>
-                    <p>
-                        <a href="@(NavigationManager.GetUriWithQueryParameters(
-                                                                   "Account/Register",
-                                                                   new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))"
-                           class="text-decoration-none text-danger">
-                            Crear una cuenta nueva
-                        </a>
-                    </p>
-                    <p>
-                        <a href="/Account/ResendEmailConfirmation" class="text-decoration-none text-danger">
-                            Reenviar confirmación de correo
-                        </a>
-                    </p>
-                </div>
-
-            </div>
+        <div class="text-center mb-4">
+            <img src="images/auto-franklin-logo-removebg-preview.png"
+                 alt="Logo"
+                 class="img-fluid"
+                 style="max-height:180px;" />
+            <h3 class="fw-bold text-dark mt-3">Iniciar sesión</h3>
         </div>
 
+        <StatusMessage Message="@errorMessage" />
+
+        <EditForm EditContext="editContext" OnSubmit="LoginUser">
+
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Correo electrónico</label>
+                <InputText @bind-Value="Input.Email"
+                           class="form-control"
+                           placeholder="ejemplo@gmail.com"
+                           autocomplete="username" />
+                <ValidationMessage For="() => Input.Email" class="text-danger" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Contraseña</label>
+                <InputText @bind-Value="Input.Password"
+                           type="password"
+                           class="form-control"
+                           placeholder="••••••••" />
+                <ValidationMessage For="() => Input.Password" class="text-danger" />
+            </div>
+
+            <div class="form-check mb-3">
+                <InputCheckbox @bind-Value="Input.RememberMe" class="form-check-input" id="rememberCheck" />
+                <label class="form-check-label" for="rememberCheck">
+                    Recordarme
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-danger w-100" style="background: #BD1717; color:white;">
+                Iniciar sesión
+            </button>
+
+        </EditForm>
+
+        <hr />
+
+        <div class="text-center mt-3">
+            <p>
+                <a href="/Account/ForgotPassword" class="fw-semibold text-danger">¿Olvidaste tu contraseña?</a>
+            </p>
+            <p>
+                <a href="/Account/Register" class="fw-semibold text-danger">¿No tienes una cuenta? Registrate</a>
+            </p>
+        </div>
+
+
     </div>
+
 </div>
 
 @code {
@@ -114,7 +95,6 @@
     protected override async Task OnInitializedAsync()
     {
         Input ??= new();
-
         editContext = new EditContext(Input);
 
         if (HttpMethods.IsGet(HttpContext.Request.Method))
@@ -162,19 +142,19 @@
             NavigationManager.NavigateTo("/", forceLoad: true);
             return;
         }
-        else if (result.RequiresTwoFactor)
+
+        if (result.RequiresTwoFactor)
         {
             RedirectManager.RedirectTo("Account/LoginWith2fa",
                 new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = Input.RememberMe });
         }
         else if (result.IsLockedOut)
         {
-            Logger.LogWarning("User account locked out.");
             RedirectManager.RedirectTo("Account/Lockout");
         }
         else
         {
-            errorMessage = "Error: Invalid login attempt.";
+            errorMessage = "Error: Intento de inicio de sesión inválido.";
         }
     }
 
