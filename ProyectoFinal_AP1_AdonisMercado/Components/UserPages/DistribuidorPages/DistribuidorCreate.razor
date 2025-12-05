@@ -9,73 +9,69 @@
 
 <PageTitle>Crear Distribuidor</PageTitle>
 
-<div class="container-fluid py-4">
+<div class="container d-flex justify-content-center align-items-start mt-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Crear Distribuidor</h2>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="fw-bold">Crear Distribuidor</h2>
 
-        <a href="/distribuidores" class="btn btn-light d-flex align-items-center gap-2">
-            <i class="fa-solid fa-arrow-left"></i> Volver
-        </a>
-    </div>
+                <a href="/distribuidores" class="btn btn-light d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Volver
+                </a>
+            </div>
 
-    <div class="card shadow border-0">
-        <div class="card-body p-4">
+            <div class="card shadow-lg">
+                <div class="card-body p-4">
 
-            <EditForm Model="Distribuidor" OnValidSubmit="Guardar" FormName="CreateDistributor">
-                <DataAnnotationsValidator />
-                <ValidationSummary class="text-danger" />
+                    <EditForm Model="Distribuidor" OnValidSubmit="Guardar" FormName="CreateDistributor">
+                        <DataAnnotationsValidator />
 
-                <div class="d-flex flex-column align-items-center">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Distribuidor ID</label>
+                            <InputNumber class="form-control" @bind-Value="Distribuidor.DistribuidorId" readonly />
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">DistribuidorID</label>
-                        <input type="number" class="form-control" @bind="Distribuidor.DistribuidorId" readonly />
-                        <ValidationMessage For="() => Distribuidor.DistribuidorId" />
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nombre</label>
+                            <InputText class="form-control" @bind-Value="Distribuidor.Nombre" placeholder="Nombre completo" />
+                            <ValidationMessage For="() => Distribuidor.Nombre" class="text-danger" />
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Nombre</label>
-                        <input type="text" class="form-control" @bind="Distribuidor.Nombre" placeholder="Nombre" />
-                        <ValidationMessage For="() => Distribuidor.Nombre" />
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Correo electrónico</label>
+                            <InputText type="email" class="form-control" @bind-Value="Distribuidor.Email" placeholder="correo@ejemplo.com" />
+                            <ValidationMessage For="() => Distribuidor.Email" class="text-danger" />
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Correo electrónico</label>
-                        <input type="email" class="form-control" @bind="Distribuidor.Email" placeholder="Correo electrónico" />
-                        <ValidationMessage For="() => Distribuidor.Email" />
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Teléfono</label>
+                            <InputText class="form-control" @bind-Value="Distribuidor.Telefono" placeholder="809-000-0000" />
+                            <ValidationMessage For="() => Distribuidor.Telefono" class="text-danger" />
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Teléfono</label>
-                        <input type="text" class="form-control" @bind="Distribuidor.Telefono" placeholder="Teléfono" />
-                        <ValidationMessage For="() => Distribuidor.Telefono" />
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Fax</label>
+                            <InputText class="form-control" @bind-Value="Distribuidor.Fax" placeholder="Fax" />
+                            <ValidationMessage For="() => Distribuidor.Fax" class="text-danger" />
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Fax</label>
-                        <input type="text" class="form-control" @bind="Distribuidor.Fax" placeholder="Fax" />
-                        <ValidationMessage For="() => Distribuidor.Fax" />
-                    </div>
+                        @if (!string.IsNullOrWhiteSpace(errorMensaje))
+                        {
+                            <div class="alert alert-danger text-center">@errorMensaje</div>
+                        }
+
+                        <button type="submit" class="btn btn-danger w-100 mt-3 d-flex justify-content-center align-items-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar
+                        </button>
+
+                    </EditForm>
 
                 </div>
-
-                @if (!string.IsNullOrWhiteSpace(errorMensaje))
-                {
-                    <div class="alert alert-danger mt-3 text-center">@errorMensaje</div>
-                }
-
-                <div class="mt-4 d-flex justify-content-center">
-                    <button type="submit" class="btn btn-danger px-4 d-flex align-items-center gap-2">
-                        <i class="fa-solid fa-floppy-disk"></i> Guardar
-                    </button>
-                </div>
-
-            </EditForm>
+            </div>
 
         </div>
     </div>
-
 </div>
 
 @code {
@@ -89,7 +85,7 @@
         if (creado)
         {
             toastService.ShowSuccess("Distribuidor creado correctamente.");
-            nav.NavigateTo("/distribuidores");
+            nav.NavigateTo("/distribuidores", true);
         }
         else
         {
