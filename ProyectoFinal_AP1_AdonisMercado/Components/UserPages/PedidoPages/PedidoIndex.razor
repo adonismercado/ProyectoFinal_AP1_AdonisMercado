@@ -1,5 +1,4 @@
 ﻿@page "/pedidos"
-
 @attribute [Authorize(Roles = "User")]
 @inject PedidoServices pedidoServices
 @inject NavigationManager nav
@@ -10,328 +9,331 @@
 
 <div class="container-fluid py-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Pedidos</h2>
+	<div class="text-center mb-3">
+		<h2 class="fw-bold">Pedidos</h2>
+	</div>
 
-        <a href="/" class="btn btn-light d-flex align-items-center gap-2">
-            <i class="fa-solid fa-house"></i> Inicio
-        </a>
-    </div>
+	<div class="card shadow-sm border-0 mx-auto" style="max-width:1500px;">
 
-    <div class="card shadow-sm border-0">
+		<div class="card-header bg-white py-3">
 
-        <div class="card-header bg-white py-3">
-            <div class="row g-3 align-items-end">
+			<div class="row g-3 align-items-end">
 
-                <div class="col-md-3">
-                    <label class="form-label fw-bold">Filtrar por</label>
-                    <select class="form-select" @bind="Filtro">
-                        <option value="" disabled selected>Seleccione...</option>
-                        <option value="PedidoId">ID</option>
-                        <option value="NombrePedido">Nombre Pedido</option>
-                        <option value="Distribuidor">Distribuidor</option>
-                    </select>
-                </div>
+				<div class="col-md-3">
+					<label class="form-label fw-bold">Filtrar por</label>
+					<select class="form-select" @bind="Filtro">
+						<option value="" disabled selected>Seleccione...</option>
+						<option value="PedidoId">ID</option>
+						<option value="NombrePedido">Nombre Pedido</option>
+						<option value="Distribuidor">Distribuidor</option>
+					</select>
+				</div>
 
-                <div class="col-md-2">
-                    <label class="form-label fw-bold">Desde</label>
-                    <input type="date" class="form-control" @bind="FechaDesde" />
-                </div>
+				<div class="col-md-2">
+					<label class="form-label fw-bold">Desde</label>
+					<input type="date" class="form-control" @bind="FechaDesde" />
+				</div>
 
-                <div class="col-md-2">
-                    <label class="form-label fw-bold">Hasta</label>
-                    <input type="date" class="form-control" @bind="FechaHasta" />
-                </div>
+				<div class="col-md-2">
+					<label class="form-label fw-bold">Hasta</label>
+					<input type="date" class="form-control" @bind="FechaHasta" />
+				</div>
 
-                <div class="col-md-3">
-                    <label class="form-label fw-bold">Buscar</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
-                        <button class="btn btn-danger" @onclick="Buscar">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                    </div>
-                </div>
+				<div class="col-md-3">
+					<label class="form-label fw-bold">Buscar</label>
+					<div class="input-group">
+						<input type="text" class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
+						<button class="btn btn-outline-danger" @onclick="Buscar">
+							<i class="fa-solid fa-magnifying-glass"></i>
+						</button>
+					</div>
+				</div>
 
-                <div class="col-md-2 text-end">
-                    <a href="/pedido/create" class="btn btn-danger px-3">
-                        <i class="fa-solid fa-plus"></i> Agregar Pedido
-                    </a>
-                </div>
+				<div class="col-md-2 d-flex align-items-end justify-content-end">
+					<a href="/pedido/create" class="btn btn-danger px-3">
+						<i class="fa-solid fa-plus"></i> Agregar Pedido
+					</a>
+				</div>
 
-            </div>
-        </div>
+			</div>
+		</div>
 
-        <div class="card-body px-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+		<div class="card-body px-0">
+			<div class="table-responsive">
+				<table class="table table-hover text-center align-middle mb-0">
 
-                    <thead class="bg-light">
-                        <tr class="text-center fw-bold">
-                            <th>Fecha</th>
-                            <th>ID</th>
-                            <th>Nombre Pedido</th>
-                            <th>Estado</th>
-                            <th>Distribuidor</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
+					<thead class="table-light fw-bold">
+						<tr>
+							<th>Fecha</th>
+							<th>ID</th>
+							<th>Nombre Pedido</th>
+							<th>Estado</th>
+							<th>Distribuidor</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
 
-                    <tbody>
-                        @foreach (var pedido in ListaPedidos)
-                        {
-                            <tr class="text-center">
-                                <td>@pedido.FechaPedido.ToShortDateString()</td>
-                                <td>@pedido.PedidoId</td>
-                                <td>@pedido.NombrePedido</td>
-                                <td>
-                                    @if (pedido.Estado == "Enviado")
-                                    {
-                                        <span class="badge bg-danger">Enviado</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-secondary">No Enviado</span>
-                                    }
-                                </td>
-                                <td>@pedido.Distribuidor?.Nombre</td>
-                                <td>
-                                    <button class="btn btn-sm btn-success"
-                                            @onclick="() => AbrirEnviar(pedido.PedidoId)">
-                                        <i class="fa-solid fa-truck"></i>
-                                    </button>
+					<tbody>
+						@foreach (var pedido in ListaPedidos)
+						{
+							<tr>
+								<td>@pedido.FechaPedido.ToShortDateString()</td>
+								<td>@pedido.PedidoId</td>
+								<td>@pedido.NombrePedido</td>
 
-                                    <button class="btn btn-sm btn-info"
-                                            @onclick="() => VerDetalle(pedido)">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
+								<td>
+									@if (pedido.Estado == "Enviado")
+									{
+										<span class="badge bg-danger">Enviado</span>
+									}
+									else
+									{
+										<span class="badge bg-secondary">No Enviado</span>
+									}
+								</td>
 
-                                    <a href="/pedido/edit/@pedido.PedidoId"
-                                       class="btn btn-sm btn-warning text-white">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </a>
+								<td>@pedido.Distribuidor?.Nombre</td>
 
-                                    <button class="btn btn-sm btn-danger"
-                                            @onclick="() => AbrirModal(pedido.PedidoId)">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
+								<td>
+									<div class="d-flex justify-content-center gap-2">
 
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
+										<button class="btn btn-sm btn-success"
+												@onclick="() => AbrirEnviar(pedido.PedidoId)">
+											<i class="fa-solid fa-truck"></i>
+										</button>
 
-                </table>
-            </div>
-        </div>
+										<button class="btn btn-sm btn-info"
+												@onclick="() => VerDetalle(pedido)">
+											<i class="fa-solid fa-eye"></i>
+										</button>
 
-        <div class="card-footer text-center bg-white py-3">
-            Mostrando @ListaPedidos.Count pedido(s)
-        </div>
+										<a href="/pedido/edit/@pedido.PedidoId"
+										   class="btn btn-sm btn-warning text-white">
+											<i class="fa-solid fa-pen"></i>
+										</a>
 
-    </div>
+										<button class="btn btn-sm btn-danger"
+												@onclick="() => AbrirModal(pedido.PedidoId)">
+											<i class="fa-solid fa-trash"></i>
+										</button>
+
+									</div>
+								</td>
+							</tr>
+						}
+					</tbody>
+
+				</table>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="card-footer text-center bg-white py-3">
+		Mostrando @ListaPedidos.Count pedido(s)
+	</div>
 
 </div>
 
 @if (mostrarModal)
 {
-    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.4);">
-        <div class="modal-dialog modal-dialog-centered">
+	<div class="modal-backdrop fade show"></div>
 
-            <div class="modal-content">
+	<div class="modal fade show d-block" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
 
-                <div class="modal-header">
-                    <h5 class="fw-bold">Confirmar Eliminación</h5>
-                    <button class="btn-close" @onclick="CerrarModal"></button>
-                </div>
+				<div class="modal-header">
+					<h5 class="fw-bold">Confirmar Eliminación</h5>
+					<button class="btn-close" @onclick="CerrarModal"></button>
+				</div>
 
-                <div class="modal-body text-center">
-                    <i class="fa-solid fa-triangle-exclamation text-warning" style="font-size:50px;"></i>
-                    <p class="mt-3">¿Seguro que desea eliminar este pedido?</p>
-                    <p class="text-muted">Esta acción no se puede deshacer.</p>
-                </div>
+				<div class="modal-body text-center">
+					<i class="fa-solid fa-triangle-exclamation text-warning" style="font-size:50px;"></i>
+					<p class="mt-3">¿Seguro que desea eliminar este pedido?</p>
+					<p class="text-muted">Esta acción no se puede deshacer.</p>
+				</div>
 
-                <div class="modal-footer justify-content-end">
-                    <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
-                    <button class="btn btn-danger" @onclick="DeshabilitarPedido">Eliminar</button>
-                </div>
+				<div class="modal-footer justify-content-end">
+					<button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+					<button class="btn btn-danger" @onclick="DeshabilitarPedido">Eliminar</button>
+				</div>
 
-            </div>
-
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
 }
 
 @if (mostrarDetalle)
 {
-    <div class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.6)">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
+	<div class="modal-backdrop fade show"></div>
 
-                <div class="modal-header">
-                    <h6 class="fw-bold">Detalle del Pedido</h6>
-                    <button class="btn-close" @onclick="CerrarDetalle"></button>
-                </div>
+	<div class="modal fade show d-block" tabindex="-1">
+		<div class="modal-dialog modal-xl modal-dialog-centered">
+			<div class="modal-content">
 
-                <div class="modal-body">
-                    <PedidoDetails Pedido="PedidoSeleccionado" />
-                </div>
+				<div class="modal-header">
+					<h6 class="fw-bold">Detalle del Pedido</h6>
+					<button class="btn-close" @onclick="CerrarDetalle"></button>
+				</div>
 
-            </div>
-        </div>
-    </div>
+				<div class="modal-body">
+					<PedidoDetails Pedido="PedidoSeleccionado" />
+				</div>
+
+			</div>
+		</div>
+	</div>
 }
+
 
 @if (mostrarEnviar)
 {
-    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.6);">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+	<div class="modal-backdrop fade show"></div>
 
-                <div class="modal-header">
-                    <h5 class="fw-bold">Enviar al Distribuidor</h5>
-                    <button class="btn-close" @onclick="CerrarEnviar"></button>
-                </div>
+	<div class="modal fade show d-block" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
 
-                <div class="modal-body text-center">
-                    <i class="fa-solid fa-truck text-danger" style="font-size:50px;"></i>
-                    <p class="mt-3">¿Esta seguro de que desea enviar este pedido?</p>
-                </div>
+				<div class="modal-header">
+					<h5 class="fw-bold">Enviar al Distribuidor</h5>
+					<button class="btn-close" @onclick="CerrarEnviar"></button>
+				</div>
 
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" @onclick="CerrarEnviar">Cancelar</button>
-                    <button class="btn btn-danger" @onclick="EnviarPedido">Enviar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+				<div class="modal-body text-center">
+					<i class="fa-solid fa-truck text-danger" style="font-size:50px;"></i>
+					<p class="mt-3">¿Está seguro que desea enviar este pedido?</p>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-secondary" @onclick="CerrarEnviar">Cancelar</button>
+					<button class="btn btn-danger" @onclick="EnviarPedido">Enviar</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
 }
 
 @code {
-    public List<Pedido> ListaPedidos { get; set; } = new();
-    public string Filtro { get; set; } = "";
-    public string ValorFiltro { get; set; } = "";
-    public DateTime? FechaDesde { get; set; }
-    public DateTime? FechaHasta { get; set; }
+	public List<Pedido> ListaPedidos { get; set; } = new();
+	public string Filtro { get; set; } = "";
+	public string ValorFiltro { get; set; } = "";
+	public DateTime? FechaDesde { get; set; }
+	public DateTime? FechaHasta { get; set; }
 
-    public bool mostrarModal = false;
-    public int PedidoIdAEliminar { get; set; }
+	public bool mostrarModal { get; set; }
+	public bool mostrarDetalle { get; set; }
+	public bool mostrarEnviar { get; set; }
 
-    public bool mostrarDetalle = false;
-    public Pedido? PedidoSeleccionado { get; set; }
+	public int PedidoIdAEliminar { get; set; }
+	public int PedidoIdAEnviar { get; set; }
 
-    public bool mostrarEnviar = false;
-    public int PedidoIdAEnviar { get; set; }
+	public Pedido? PedidoSeleccionado { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        ListaPedidos = await pedidoServices.ListarPedidos(p => p.isActive);
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		ListaPedidos = await pedidoServices.ListarPedidos(p => p.isActive);
+	}
 
-    public async Task Buscar()
-    {
-        if (FechaDesde.HasValue && FechaHasta.HasValue)
-        {
-            ListaPedidos = await pedidoServices.ListarPedidos(
-                e => e.FechaPedido >= FechaDesde && e.FechaPedido <= FechaHasta && e.isActive);
-        }
-        else if (FechaDesde.HasValue)
-        {
-            ListaPedidos = await pedidoServices.ListarPedidos(
-                e => e.FechaPedido >= FechaDesde && e.isActive);
-        }
-        else if (FechaHasta.HasValue)
-        {
-            ListaPedidos = await pedidoServices.ListarPedidos(
-                e => e.FechaPedido <= FechaHasta && e.isActive);
-        }
+	public async Task Buscar()
+	{
+		if (FechaDesde.HasValue && FechaHasta.HasValue)
+		{
+			ListaPedidos = await pedidoServices.ListarPedidos(p => p.FechaPedido >= FechaDesde && p.FechaPedido <= FechaHasta && p.isActive);
+		}
+		else if (FechaDesde.HasValue)
+		{
+			ListaPedidos = await pedidoServices.ListarPedidos( p => p.FechaPedido >= FechaDesde && p.isActive);
+		}
+		else if (FechaHasta.HasValue)
+		{
+			ListaPedidos = await pedidoServices.ListarPedidos( p => p.FechaPedido <= FechaHasta && p.isActive);
+		}
 
-        if (!string.IsNullOrWhiteSpace(ValorFiltro))
-        {
-            if (Filtro == "PedidoId" && int.TryParse(ValorFiltro, out var id))
-            {
-                ListaPedidos = await pedidoServices.ListarPedidos(e => e.PedidoId == id && e.isActive);
-            }
-            else if (Filtro == "NombrePedido")
-            {
-                ListaPedidos = await pedidoServices.ListarPedidos(e => e.NombrePedido.ToLower().Contains(ValorFiltro) && e.isActive);
-            }
-            else if (Filtro == "Distribuidor")
-            {
-                ListaPedidos = await pedidoServices.ListarPedidos(e => e.Distribuidor.Nombre.ToLower().Contains(ValorFiltro) && e.isActive);
-            }
-        }
-        else
-        {
-            ListaPedidos = await pedidoServices.ListarPedidos(p => p.isActive);
-        }
-    }
+		if (!string.IsNullOrWhiteSpace(ValorFiltro))
+		{
+			if (Filtro == "PedidoId" && int.TryParse(ValorFiltro, out var id))
+			{
+				ListaPedidos = await pedidoServices.ListarPedidos( p => p.PedidoId == id && p.isActive);
+			}
+			else if (Filtro == "NombrePedido")
+			{
+				ListaPedidos = await pedidoServices.ListarPedidos( p => p.NombrePedido.ToLower().Contains(ValorFiltro) && p.isActive);
+			}
+			else if (Filtro == "Distribuidor")
+			{
+				ListaPedidos = await pedidoServices.ListarPedidos( p => p.Distribuidor.Nombre.ToLower().Contains(ValorFiltro) && p.isActive);
+			}
+		}
+		else
+		{
+			ListaPedidos = await pedidoServices.ListarPedidos(p => p.isActive);
+		}
+	}
 
-    public void AbrirModal(int id)
-    {
-        PedidoIdAEliminar = id;
-        mostrarModal = true;
-    }
+	public void AbrirModal(int id)
+	{
+		PedidoIdAEliminar = id;
+		mostrarModal = true;
+	}
 
-    public void CerrarModal()
-    {
-        mostrarModal = false;
-    }
+	public void CerrarModal()
+	{
+		mostrarModal = false;
+	}
 
-    public async Task DeshabilitarPedido()
-    {
-        var ok = await pedidoServices.Deshabilitar(PedidoIdAEliminar);
+	public async Task DeshabilitarPedido()
+	{
+		var deshabilitado = await pedidoServices.Deshabilitar(PedidoIdAEliminar);
 
-        if (ok)
-        {
-            toastService.ShowSuccess("Pedido eliminado exitosamente!");
-            ListaPedidos = await pedidoServices.ListarPedidos(d => d.PedidoId > 0 && d.isActive);
-        }
-        else
-        {
-            toastService.ShowError("No se pudo eliminar el pedido.");
-        }
+		if (deshabilitado)
+		{
+			toastService.ShowSuccess("Pedido eliminado exitosamente!");
+			ListaPedidos = await pedidoServices.ListarPedidos(p => p.isActive);
+		}
+		else
+			toastService.ShowError("No se pudo eliminar el pedido.");
 
-        CerrarModal();
-    }
+		CerrarModal();
+	}
 
+	public void VerDetalle(Pedido p)
+	{
+		PedidoSeleccionado = p;
+		mostrarDetalle = true;
+	}
 
-    public void VerDetalle(Pedido p)
-    {
-        PedidoSeleccionado = p;
-        mostrarDetalle = true;
-    }
+	public void CerrarDetalle()
+	{
+		mostrarDetalle = false;
+	}
 
-    public void CerrarDetalle()
-    {
-        mostrarDetalle = false;
-    }
+	public void AbrirEnviar(int id)
+	{
+		PedidoIdAEnviar = id;
+		mostrarEnviar = true;
+	}
 
-    public void AbrirEnviar(int id)
-    {
-        PedidoIdAEnviar = id;
-        mostrarEnviar = true;
-    }
+	public void CerrarEnviar()
+	{
+		mostrarEnviar = false;
+	}
 
-    public void CerrarEnviar()
-    {
-        mostrarEnviar = false;
-    }
+	public async Task EnviarPedido()
+	{
+		var enviado = await pedidoServices.EnviarPedido(PedidoIdAEnviar);
 
-    public async Task EnviarPedido()
-    {
-        var enviado = await pedidoServices.EnviarPedido(PedidoIdAEnviar);
+		if (enviado)
+		{
+			toastService.ShowSuccess("Pedido enviado exitosamente!");
+			ListaPedidos = await pedidoServices.ListarPedidos(p => p.isActive);
+		}
+		else
+		{
+			toastService.ShowError("No se pudo enviar el pedido.");
+		}
 
-        if (enviado)
-        {
-            toastService.ShowSuccess("Pedido enviado exitosamente!");
-            ListaPedidos = await pedidoServices.ListarPedidos(p => p.isActive);
-        }
-        else
-        {
-            toastService.ShowError("No se pudo enviar el pedido.");
-        }
-
-        CerrarEnviar();
-    }
+		CerrarEnviar();
+	}
 }
