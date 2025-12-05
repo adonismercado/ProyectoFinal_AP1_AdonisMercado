@@ -3,12 +3,12 @@
 
 <Toasts class="p-3" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
 
-<nav class="navbar navbar-expand-lg bg-danger py-3">
+<nav class="navbar navbar-expand-lg py-3" style="background: #BD1717; color:white;">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="/">
             <img src="images/autofranklin-layout-removebg-preview.png"
                  alt="AutoFranklin Logo"
-                 style="height:75px; width:auto;" class="me-4" />
+                 style="height:45px; width:auto;" class="me-4" />
         </a>
 
         <button class="navbar-toggler" type="button" style="border:none;">
@@ -20,7 +20,7 @@
             <ul class="navbar-nav me-auto gap-2">
 
                 <li class="nav-item">
-                    <NavLink href="/admin" class="nav-link text-white fw-semibold">Inicio</NavLink>
+                    <NavLink href="/" class="nav-link text-white fw-semibold">Inicio</NavLink>
                 </li>
 
                 <li class="nav-item">
@@ -41,17 +41,17 @@
 
                 @if (isAuthenticated)
                 {
-                    <a href="/Account/Manage" class="btn btn-outline-light d-flex align-items-center gap-2">
+                    <a href="/Account/Manage" class="btn btn-sm btn-danger d-flex align-items-center gap-2" style="background: #BD1717; border-color:#BD1717; color:white;">
                         <i class="fa-solid fa-user"></i> @userName
                     </a>
 
-                    <a href="/DoLogout" class="btn btn-danger d-flex align-items-center gap-2" style="border-color: white;">
+                    <a href="/DoLogout" class="btn btn-sm btn-danger d-flex align-items-center gap-2" style="background: #BD1717; border-color:white;">
                         <i class="fa-solid fa-right-from-bracket"></i> Salir
                     </a>
                 }
                 else
                 {
-                    <a href="/Account/Login" class="btn btn-light">Iniciar sesión</a>
+                    <a href="/Account/Login" class="btn btn-sm btn-danger" style="background: #BD1717; border-color: #BD1717; color:white;">Iniciar sesión</a>
                 }
 
             </div>
