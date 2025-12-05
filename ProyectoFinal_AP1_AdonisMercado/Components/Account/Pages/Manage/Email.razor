@@ -14,66 +14,68 @@
 
 <PageTitle>Correo electrónico</PageTitle>
 
-<div class="container d-flex justify-content-center align-items-start mt-5">
-    <div class="row w-100 justify-content-center">
-        <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
+<div class="container-fluid d-flex justify-content-center align-items-start"
+     style="padding-top: 70px;">
 
-            <div class="card shadow-lg">
-                <div class="card-header text-center">
-                    <h2 class="card-title mb-0 fw-bold">Correo electrónico</h2>
-                </div>
+    <div class="card shadow-lg p-4"
+         style="max-width: 600px; width: 100%; border-radius:15px;">
 
-                <div class="card-body p-4">
+        <div class="text-center mb-4">
+            <h3 class="fw-bold text-dark mt-3">Correo electrónico</h3>
+        </div>
 
-                    <StatusMessage Message="@message" />
+        <StatusMessage Message="@message" />
 
-                    @if (isEmailConfirmed)
-                    {
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo actual</label>
-                            <div class="input-group">
-                                <input type="text" value="@email" id="email" class="form-control" disabled />
-                                <span class="input-group-text text-success fw-bold">✓ Verificado</span>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo actual</label>
-                            <input type="text" value="@email" id="email" class="form-control" disabled />
-                            <button type="submit" class="btn btn-link p-0 mt-2" form="send-verification-form">
-                                Enviar correo de verificación
-                            </button>
-                        </div>
-                    }
-
-                    <form @onsubmit="OnSendEmailVerificationAsync" id="send-verification-form" method="post">
-                        <AntiforgeryToken />
-                    </form>
-
-                    <EditForm Model="Input" OnValidSubmit="OnValidSubmitAsync" FormName="change-email" method="post">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary class="text-danger mb-3" />
-
-                        <div class="mb-3">
-                            <label for="Input.NewEmail" class="form-label">Nuevo correo</label>
-                            <InputText @bind-Value="Input.NewEmail"
-                                       id="Input.NewEmail"
-                                       class="form-control"
-                                       autocomplete="email" />
-                            <ValidationMessage For="() => Input.NewEmail" class="text-danger" />
-                        </div>
-
-                        <button type="submit" class="btn btn-danger w-100">
-                            Cambiar correo
-                        </button>
-                    </EditForm>
-
+        @if (isEmailConfirmed)
+        {
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Correo actual</label>
+                <div class="input-group">
+                    <input type="text" value="@email" class="form-control" disabled />
+                    <span class="input-group-text text-success fw-bold">✓ Verificado</span>
                 </div>
             </div>
+        }
+        else
+        {
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Correo actual</label>
+                <input type="text" value="@email" class="form-control" disabled />
+                <button type="submit"
+                        form="send-verification-form"
+                        class="btn btn-link p-0 mt-2 fw-semibold text-decoration-none"
+                        style="color:#BD1717;">
+                    Enviar correo de verificación
+                </button>
+            </div>
+        }
 
-        </div>
+        <form @onsubmit="OnSendEmailVerificationAsync" id="send-verification-form" method="post">
+            <AntiforgeryToken />
+        </form>
+
+        <EditForm Model="Input" FormName="change-email" OnValidSubmit="OnValidSubmitAsync">
+
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger mb-3" />
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Nuevo correo</label>
+                <InputText @bind-Value="Input.NewEmail"
+                           class="form-control"
+                           autocomplete="email"
+                           placeholder="nuevo-correo@gmail.com" />
+                <ValidationMessage For="() => Input.NewEmail" class="text-danger" />
+            </div>
+
+            <button type="submit"
+                    class="btn w-100 text-white fw-semibold"
+                    style="background:#BD1717;">
+                Cambiar correo
+            </button>
+
+        </EditForm>
+
     </div>
 </div>
 
@@ -93,6 +95,7 @@
     {
         Input ??= new();
         user = await UserManager.GetUserAsync(HttpContext.User);
+
         if (user is null)
         {
             RedirectManager.RedirectToInvalidUser(UserManager, HttpContext);
@@ -126,7 +129,10 @@
             NavigationManager.ToAbsoluteUri("Account/ConfirmEmailChange").AbsoluteUri,
             new Dictionary<string, object?> { ["userId"] = userId, ["email"] = Input.NewEmail, ["code"] = code });
 
-        await EmailSender.SendConfirmationLinkAsync(user, Input.NewEmail, HtmlEncoder.Default.Encode(callbackUrl));
+        await EmailSender.SendConfirmationLinkAsync(
+            user,
+            Input.NewEmail,
+            HtmlEncoder.Default.Encode(callbackUrl));
 
         message = "Se envió un enlace de confirmación. Revisa tu correo.";
     }
