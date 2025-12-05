@@ -13,81 +13,75 @@
 
 <div class="container-fluid py-4">
 
-	<!-- HEADER -->
-	<div class="d-flex justify-content-between align-items-center mb-4">
+	<div class="text-center mb-4">
 		<h2 class="fw-bold">Crear Pedido</h2>
-
-		<a href="/pedidos" class="btn btn-light d-flex align-items-center gap-2">
-			<i class="fa-solid fa-arrow-left"></i> Volver
-		</a>
 	</div>
 
-	<div class="card shadow border-0">
+	<div class="card shadow border-0 w-100" style="width: 100%;">
 		<div class="card-body p-4">
 
 			<EditForm Model="Pedido" OnValidSubmit="Guardar" FormName="CreatePedido">
-
 				<DataAnnotationsValidator />
-				<ValidationSummary class="text-danger" />
 
-				<div class="mb-3">
-					<label class="form-label fw-bold">Distribuidor</label>
-					<select class="form-select form-control" @bind="Pedido.DistribuidorId">
-						<option value="0" disabled selected>Seleccione un distribuidor</option>
-						@foreach (var d in ListaDistribuidores)
-						{
-							<option value="@d.DistribuidorId">@d.Nombre</option>
-						}
-					</select>
+				<div class="d-flex flex-column align-items-center">
+
+					<div class="mb-3 w-100">
+						<label class="form-label fw-bold">Distribuidor</label>
+						<select class="form-select" @bind="Pedido.DistribuidorId">
+							<option value="0" disabled selected>Seleccione un distribuidor</option>
+							@foreach (var d in ListaDistribuidores)
+							{
+								<option value="@d.DistribuidorId">@d.Nombre</option>
+							}
+						</select>
+						<ValidationMessage For="() => Pedido.DistribuidorId" />
+					</div>
+
+					<div class="mb-3 w-100">
+						<label class="form-label fw-bold">Pedido ID</label>
+						<input type="number" class="form-control" @bind="Pedido.PedidoId" readonly />
+					</div>
+
+					<div class="mb-3 w-100">
+						<label class="form-label fw-bold">Fecha</label>
+						<input type="date" class="form-control" @bind="Pedido.FechaPedido" />
+					</div>
+
+					<div class="mb-3 w-100">
+						<label class="form-label fw-bold">Nombre del Pedido</label>
+						<input type="text" class="form-control" @bind="Pedido.NombrePedido" placeholder="Nombre" />
+						<ValidationMessage For="() => Pedido.NombrePedido" />
+					</div>
+
+					<div class="mb-3 w-100">
+						<label class="form-label fw-bold">Estado</label>
+						<select class="form-select" @bind="Pedido.Estado">
+							<option value="No Enviado" selected>No Enviado</option>
+							<option value="Enviado" disabled>Enviado</option>
+						</select>
+					</div>
+
 				</div>
 
-				<div class="mb-3">
-					<label class="form-label fw-bold">Pedido ID</label>
-					<input type="number" class="form-control" @bind="Pedido.PedidoId" readonly />
-				</div>
-
-				<div class="mb-3">
-					<label class="form-label fw-bold">Fecha</label>
-					<input type="date" class="form-control" @bind="Pedido.FechaPedido" />
-				</div>
-
-				<div class="mb-3">
-					<label class="form-label fw-bold">Nombre del Pedido</label>
-					<input type="text" class="form-control" @bind="Pedido.NombrePedido" placeholder="Nombre" />
-				</div>
-
-				<div class="mb-3">
-					<label class="form-label fw-bold">Estado</label>
-					<select class="form-select" @bind="Pedido.Estado">
-						<option value="No Enviado">No Enviado</option>
-						<option value="Enviado" disabled>Enviado</option>
-					</select>
-				</div>
 
 				<hr />
 
-				<div class="border p-3 rounded">
+				<div class="p-3 border rounded">
 
 					<div class="d-flex justify-content-between align-items-center mb-3">
 						<h4 class="fw-bold">
 							<i class="fa-solid fa-car-side text-danger"></i> Vehículos
 						</h4>
 
-						<button type="button" class="btn btn-danger d-flex align-items-center gap-2"
+						<button class="btn btn-danger d-flex align-items-center gap-2"
+								type="button"
 								@onclick="AbrirModalVehiculos">
 							<i class="fa-solid fa-car"></i> Seleccionar Vehículos
 						</button>
 					</div>
 
-					@if (!string.IsNullOrWhiteSpace(errorMensaje))
-					{
-						<div class="alert alert-danger">@errorMensaje</div>
-					}
-
-					<hr />
-
 					<div class="table-responsive">
-						<table class="table table-striped table-hover text-center mt-3">
+						<table class="table table-striped table-hover text-center w-100">
 							<thead class="bg-light fw-bold">
 								<tr>
 									<th>ID</th>
@@ -140,23 +134,23 @@
 
 					<hr />
 
-					<div class="row">
-						<div class="col-md-6">
+					<div class="row justify-content-between">
+						<div class="col-md-4 mb-3">
 							<label class="form-label fw-bold">Cantidad total</label>
-							<input type="number" class="form-control" readonly
+							<input class="form-control" readonly
 								   value="@Pedido.PedidoDetalles.Count()" />
 						</div>
 
-						<div class="col-md-6">
+						<div class="col-md-4 mb-3">
 							<label class="form-label fw-bold">Total</label>
-							<input type="text" class="form-control" readonly
+							<input class="form-control" readonly
 								   value="USD$@Pedido.PedidoDetalles.Sum(p => p.Cantidad * p.PrecioUnitario)" />
 						</div>
 					</div>
 				</div>
 
-				<div class="text-center mt-4">
-					<button type="submit" class="btn btn-danger px-4 d-flex align-items-center mx-auto gap-2">
+				<div class="mt-4 text-center">
+					<button class="btn btn-danger px-4 d-flex align-items-center gap-2 mx-auto">
 						<i class="fa-solid fa-floppy-disk"></i> Guardar
 					</button>
 				</div>
@@ -165,7 +159,9 @@
 
 		</div>
 	</div>
+
 </div>
+
 
 @if (mostrarModalVehiculos)
 {
