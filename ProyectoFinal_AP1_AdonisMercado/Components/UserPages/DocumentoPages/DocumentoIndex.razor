@@ -10,17 +10,15 @@
 
 <div class="container-fluid py-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="text-center mb-3">
         <h2 class="fw-bold">Documentos</h2>
-
-        <a href="/" class="btn btn-light d-flex align-items-center gap-2">
-            <i class="fa-solid fa-house"></i> Inicio
-        </a>
     </div>
 
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 mx-auto" style="max-width:1500px;">
+
         <div class="card-header bg-white py-3">
             <div class="row g-3 align-items-end">
+
                 <div class="col-md-3">
                     <label class="form-label fw-bold">Filtrar Por:</label>
                     <select class="form-select" @bind="Filtro">
@@ -34,19 +32,21 @@
                     <label class="form-label fw-bold">Buscar</label>
                     <div class="input-group">
                         <input type="text" class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
-                        <button class="btn btn-danger" @onclick="Buscar">
+                        <button class="btn btn-outline-danger" @onclick="Buscar">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
 
         <div class="card-body px-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr class="text-center fw-bold">
+                <table class="table table-hover text-center align-middle mb-0">
+
+                    <thead class="table-light fw-bold">
+                        <tr>
                             <th>Pedido ID</th>
                             <th>Nombre Pedido</th>
                             <th>Commercial Invoice</th>
@@ -57,34 +57,34 @@
                     <tbody>
                         @foreach (var pedido in ListaPedidos)
                         {
-                            <tr class="text-center">
+                            <tr>
                                 <td>@pedido.PedidoId</td>
                                 <td>@pedido.NombrePedido</td>
 
                                 <td>
-                                    <button type="button"
-                                            class="btn btn-sm btn-success"
-                                            @onclick="@(() => AbrirModalSubir(pedido.PedidoId, "Commercial Invoice"))">
-                                        <i class="fa fa-upload"></i>
-                                    </button>
-                                    <button type="button"
-                                            class="btn btn-sm btn-secondary"
-                                            @onclick="@(() => AbrirModalVerCI(pedido.PedidoId))">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <button class="btn btn-sm btn-success"
+                                                @onclick="@(() => AbrirModalSubir(pedido.PedidoId, "Commercial Invoice"))">
+                                            <i class="fa fa-upload"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-secondary"
+                                                @onclick="@(() => AbrirModalVerCI(pedido.PedidoId))">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
                                 </td>
 
                                 <td>
-                                    <button type="button"
-                                            class="btn btn-sm btn-success"
-                                            @onclick="@(() => AbrirModalSubir(pedido.PedidoId, "Bill of Lading"))">
-                                        <i class="fa fa-upload"></i>
-                                    </button>
-                                    <button type="button"
-                                            class="btn btn-sm btn-secondary"
-                                            @onclick="@(() => AbrirModalVerBL(pedido.PedidoId))">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <button class="btn btn-sm btn-success"
+                                                @onclick="@(() => AbrirModalSubir(pedido.PedidoId, "Bill of Lading"))">
+                                            <i class="fa fa-upload"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-secondary"
+                                                @onclick="@(() => AbrirModalVerBL(pedido.PedidoId))">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
                                 </td>
 
                             </tr>
@@ -93,8 +93,14 @@
                 </table>
             </div>
         </div>
+
+        <div class="card-footer text-center bg-white py-3">
+            <span class="text-muted">Mostrando @ListaPedidos.Count documento(s)</span>
+        </div>
     </div>
+
 </div>
+
 
 @if (mostrarModalSubir)
 {
