@@ -2,6 +2,8 @@
 @attribute [Authorize(Roles = "Admin")]
 @layout EmptyLayout
 
+@inject VehiculoService vehiculoService
+
 <div class="container-fluid p-4">
 
     <div class="text-center mb-4">
@@ -43,3 +45,25 @@
 
     </div>
 </div>
+
+@code {
+    public int TotalVehiculos { get; set; }
+    public int VehiculosActivos { get; set; }
+    public int VehiculosInactivos { get; set; }
+
+    public List<Vehiculo> UltimosVehiculos { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var vehiculos = await vehiculoService.ListarVehiculos(v => true);
+
+        TotalVehiculos = vehiculos.Count;
+        VehiculosActivos = vehiculos.Count(v => v.isActive);
+        VehiculosInactivos = vehiculos.Count(v => !v.isActive);
+
+        UltimosVehiculos = vehiculos
+            .OrderByDescending(v => v.VehiculoId)
+            .Take(5)
+            .ToList();
+    }
+}
