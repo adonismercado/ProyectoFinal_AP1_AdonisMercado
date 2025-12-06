@@ -129,24 +129,24 @@
 
 										@if (v.isActive)
 										{
-											<a class="btn btn-sm btn-warning text-white"
+											<a class="btn btn-warning text-white"
 											   href="/vehiculos/edit/@v.VehiculoId">
 												<i class="fa-solid fa-pen-to-square"></i>
 											</a>
 
-											<button class="btn btn-sm btn-danger"
+											<button class="btn btn-danger"
 													@onclick="() => AbrirDeshabilitar(v)">
 												<i class="fa-solid fa-ban"></i>
 											</button>
 										}
 										else
 										{
-											<button class="btn btn-sm btn-secondary"
+											<button class="btn btn-secondary"
 													@onclick="() => AbrirHabilitar(v)">
 												<i class="fa-solid fa-check"></i>
 											</button>
 
-											<button class="btn btn-sm btn-danger"
+											<button class="btn btn-danger"
 													@onclick="() => AbrirEliminar(v)">
 												<i class="fa-solid fa-trash"></i>
 											</button>
