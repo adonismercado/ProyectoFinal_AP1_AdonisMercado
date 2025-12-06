@@ -97,22 +97,22 @@
 								<td>
 									<div class="d-flex justify-content-center gap-2">
 
-										<button class="btn btn-sm btn-success"
+										<button class="btn btn-success"
 												@onclick="() => AbrirEnviar(pedido.PedidoId)">
 											<i class="fa-solid fa-truck"></i>
 										</button>
 
-										<button class="btn btn-sm btn-info"
+										<button class="btn btn-info"
 												@onclick="() => VerDetalle(pedido)">
 											<i class="fa-solid fa-eye"></i>
 										</button>
 
 										<a href="/pedido/edit/@pedido.PedidoId"
-										   class="btn btn-sm btn-warning text-white">
+										   class="btn btn-warning text-white">
 											<i class="fa-solid fa-pen"></i>
 										</a>
 
-										<button class="btn btn-sm btn-danger"
+										<button class="btn btn-danger"
 												@onclick="() => AbrirModal(pedido.PedidoId)">
 											<i class="fa-solid fa-trash"></i>
 										</button>
