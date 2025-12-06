@@ -11,15 +11,15 @@
 <PageTitle>Editar Vehiculo</PageTitle>
 <div class="container-fluid py-4">
 	<div class="d-flex justify-content-between align-items-center mb-3">
-		<h2 class="fw-bold">Editar Vehículo</h2>
+		<h2 class="fw-bold">Editar Veh&iacute;culo</h2>
 
-		<a href="/vehiculos" class="btn btn-light">
-			<i class="fa-solid fa-arrow-left me-2"></i> Volver
+		<a href="/vehiculos" class="btn btn-light d-flex align-items-center gap-2">
+			<i class="fa-solid fa-arrow-left"></i> Volver
 		</a>
 	</div>
 
-	<div class="card shadow border-0">
-		<div class="card-body">
+	<div class="card shadow border-0 w-100" style="width: 100%;">
+		<div class="card-body p-4">
 
 			<EditForm Model="@Vehiculo" OnValidSubmit="GuardarCambios" FormName="EditVehiculo">
 				<DataAnnotationsValidator />
