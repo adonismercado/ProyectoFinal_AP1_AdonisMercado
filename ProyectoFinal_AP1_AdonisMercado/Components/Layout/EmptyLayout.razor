@@ -1,6 +1,14 @@
 ﻿@inherits LayoutComponentBase
 @inject AuthenticationStateProvider AuthStateProvider
 
+<div style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+    <Toasts class="p-3"
+            AutoHide="true"
+            Delay="4000"
+            Placement="ToastsPlacement.TopRight"
+            ShowCloseButton="true" />
+</div>
+
 <nav class="navbar navbar-expand-lg py-3 shadow-sm" style="background: #BD1717;">
     <div class="container-fluid">
         <div class="navbar-collapse show d-flex">

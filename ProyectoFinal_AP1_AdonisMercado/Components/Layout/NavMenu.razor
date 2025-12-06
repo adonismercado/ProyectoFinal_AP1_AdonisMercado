@@ -1,6 +1,13 @@
 ﻿@implements IDisposable
-
 @inject NavigationManager NavigationManager
+
+<div style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+    <Toasts class="p-3"
+            AutoHide="true"
+            Delay="4000"
+            Placement="ToastsPlacement.TopRight"
+            ShowCloseButton="true" />
+</div>
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
