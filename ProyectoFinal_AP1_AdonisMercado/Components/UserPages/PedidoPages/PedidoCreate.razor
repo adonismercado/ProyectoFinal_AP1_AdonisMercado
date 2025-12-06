@@ -1,4 +1,5 @@
 ﻿@page "/pedido/create"
+@rendermode InteractiveServer
 @layout EmptyLayout
 
 @attribute [Authorize(Roles = "User")]
@@ -7,7 +8,7 @@
 @inject DistribuidorServices distribuidorServices
 @inject NavigationManager nav
 @inject ToastService toastService
-@rendermode InteractiveServer
+
 
 <PageTitle>Crear Pedido</PageTitle>
 
@@ -378,7 +379,7 @@
 		if (ok)
 		{
 			toastService.ShowSuccess("Pedido creado exitosamente!");
-			nav.NavigateTo("/pedidos");			
+			nav.NavigateTo("/pedidos");
 		}
 		else
 		{

@@ -1,11 +1,11 @@
 ﻿@page "/distribuidor/create"
+@rendermode InteractiveServer
 @layout EmptyLayout
 
 @attribute [Authorize(Roles = "User")]
 @inject DistribuidorServices distribuidorServices
 @inject NavigationManager nav
 @inject ToastService toastService
-@rendermode InteractiveServer
 
 <PageTitle>Crear Distribuidor</PageTitle>
 
@@ -85,7 +85,7 @@
         if (creado)
         {
             toastService.ShowSuccess("Distribuidor creado correctamente.");
-            nav.NavigateTo("/distribuidores", true);
+            // nav.NavigateTo("/distribuidores");
         }
         else
         {
