@@ -8,39 +8,103 @@
 
     <div class="text-center mb-4">
         <img src="images/auto-franklin-logo-removebg-preview.png"
-             alt="AutoFranklin Logo"
+             alt="Logo"
              style="width:180px; height:auto;" />
     </div>
 
     <h1 class="fw-bold text-center text-dark mb-5">
-        Bienvenido al Panel De Administrador
+        PANEL DE ADMINISTRACIÓN
     </h1>
 
-    <div class="row g-4 justify-content-center">
-        <!-- Deshabilitados -->
-        <div class="col-12 col-sm-6 col-lg-4">
+    <div class="row g-4 justify-content-center mb-5">
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <i class="fa-solid fa-car text-danger" style="font-size:45px;"></i>
+                <h6 class="mt-2 text-uppercase text-muted fw-bold">Vehículos</h6>
+                <h3 class="fw-bold">@TotalVehiculos</h3>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <i class="fa-solid fa-check text-danger" style="font-size:45px;"></i>
+                <h6 class="mt-2 text-uppercase text-muted fw-bold">Vehículos Activos</h6>
+                <h3 class="fw-bold">@VehiculosActivos</h3>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <i class="fa-solid fa-ban text-danger" style="font-size:45px;"></i>
+                <h6 class="mt-2 text-uppercase text-muted fw-bold">Vehículos Inactivos</h6>
+                <h3 class="fw-bold">@VehiculosInactivos</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row justify-content-center g-4">
+
+        <div class="col-12 col-lg-4">
+            <h4 class="fw-bold mb-3">Accesos Rápidos</h4>
+
+            <a href="/vehiculos" class="text-decoration-none">
+                <div class="card shadow-sm border-0 p-3 mb-3 d-flex flex-row align-items-center">
+                    <i class="fa-solid fa-car text-danger me-3" style="font-size:32px;"></i>
+                    <h5 class="m-0 text-dark fw-bold">Vehículos</h5>
+                </div>
+            </a>
+
             <a href="/deshabilitados" class="text-decoration-none">
-                <div class="card shadow-lg border-0 home-card text-center">
-                    <div class="card-body p-4">
-                        <i class="fa-solid fa-circle-xmark text-danger" style="font-size:50px;"></i>
-                        <h4 class="mt-3 fw-bold text-dark">Deshabilitados</h4>
-                        <p class="text-muted">Administra las entidades deshabilitadas.</p>
-                    </div>
+                <div class="card shadow-sm border-0 p-3 mb-3 d-flex flex-row align-items-center">
+                    <i class="fa-solid fa-circle-xmark text-danger me-3" style="font-size:32px;"></i>
+                    <h5 class="m-0 text-dark fw-bold">Deshabilitados</h5>
                 </div>
             </a>
         </div>
 
-        <!-- Vehiculos -->
-        <div class="col-12 col-sm-6 col-lg-4">
-            <a href="/vehiculos" class="text-decoration-none">
-                <div class="card shadow-lg border-0 home-card text-center">
-                    <div class="card-body p-4">
-                        <i class="fa-solid fa-car text-danger" style="font-size:50px;"></i>
-                        <h4 class="mt-3 fw-bold text-dark">Veh&iacute;culos</h4>
-                        <p class="text-muted">Gestiona los veh&iacute;culos del sistema.</p>
-                    </div>
+        <div class="col-12 col-lg-7">
+            <h4 class="fw-bold mb-3">Últimos Vehículos Registrados</h4>
+
+            <div class="card shadow-sm border-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle text-center mb-0">
+                        <thead class="table-light fw-bold">
+                            <tr>
+                                <th>ID</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Año</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var v in UltimosVehiculos)
+                            {
+                                <tr>
+                                    <td>@v.VehiculoId</td>
+                                    <td>@v.MarcaVehiculo</td>
+                                    <td>@v.ModeloVehiculo</td>
+                                    <td>@v.AnioFabricacion</td>
+                                    <td>
+                                        @if (v.isActive)
+                                        {
+                                            <span class="badge bg-danger">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Inactivo</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-            </a>
+            </div>
+
         </div>
 
     </div>
