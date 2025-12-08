@@ -9,21 +9,29 @@
             ShowCloseButton="true" />
 </div>
 
-<nav class="navbar navbar-expand-lg py-3" style="background: #BD1717; color:white;">
+<nav class="navbar navbar-expand-lg py-3" style="background:#BD1717; color:white;">
     <div class="container-fluid">
+
         <a class="navbar-brand d-flex align-items-center" href="/">
             <img src="images/autofranklin-layout-removebg-preview.png"
                  alt="AutoFranklin Logo"
-                 style="height:45px; width:auto;" class="me-4" />
+                 style="height:45px; width:auto;" class="me-3" />
         </a>
 
-        <button class="navbar-toggler" type="button" style="border:none;">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler text-white"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+
+            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
         </button>
 
-        <div class="navbar-collapse show">
+        <div class="collapse navbar-collapse" id="mainNavbar">
 
-            <ul class="navbar-nav me-auto gap-2">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 mt-3 mt-lg-0">
 
                 <li class="nav-item">
                     <NavLink href="/" class="nav-link text-white fw-semibold">Inicio</NavLink>
@@ -43,21 +51,26 @@
 
             </ul>
 
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 mb-3 mb-lg-0">
 
                 @if (isAuthenticated)
                 {
-                    <a href="/Account/Manage" class="btn btn-danger d-flex align-items-center gap-2" style="background: #BD1717; border-color:#BD1717; color:white;">
+                    <a href="/Account/Manage"
+                       class="btn btn-outline-light d-flex align-items-center gap-2" style="background: #BD1717; color:white; border-color:#BD1717;">
                         <i class="fa-solid fa-user"></i> @userName
                     </a>
 
-                    <a href="/DoLogout" class="btn btn-danger d-flex align-items-center gap-2" style="background: #BD1717; border-color:white;">
+                    <a href="/DoLogout"
+                       class="btn btn-light d-flex align-items-center gap-2" style="background: #BD1717; color:white; border-color:#BD1717;">
                         <i class="fa-solid fa-right-from-bracket"></i> Salir
                     </a>
                 }
                 else
                 {
-                    <a href="/Account/Login" class="btn btn-danger" style="background: #BD1717; border-color: #BD1717; color:white;">Iniciar sesión</a>
+                    <a href="/Account/Login"
+                       class="btn btn-light">
+                        Iniciar sesión
+                    </a>
                 }
 
             </div>
@@ -65,6 +78,7 @@
         </div>
     </div>
 </nav>
+
 
 <div class="container-fluid py-4">
     @Body
