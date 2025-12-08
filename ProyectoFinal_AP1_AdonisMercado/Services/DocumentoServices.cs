@@ -2,25 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using ProyectoFinal_AP1_AdonisMercado.DAL;
 using ProyectoFinal_AP1_AdonisMercado.Models;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 
 namespace ProyectoFinal_AP1_AdonisMercado.Services;
 
 public class DocumentoServices
 {
-    private readonly IDbContextFactory<Contexto> DbFactory;
-    private readonly string uploadFolder;
+    private readonly IDbContextFactory<Contexto> _dbFactory;
+    private readonly CloudflareR2Service _r2Service;
 
-    public DocumentoServices(IDbContextFactory<Contexto> dbContextFactory, IWebHostEnvironment env)
+    public DocumentoServices(IDbContextFactory<Contexto> dbFactory, CloudflareR2Service r2Service)
     {
-        DbFactory = dbContextFactory;
-        uploadFolder = Path.Combine(env.WebRootPath, "documento_pedido");
-
-        if (!Directory.Exists(uploadFolder))
-        {
-            Directory.CreateDirectory(uploadFolder);
-        }
+        _dbFactory = dbFactory;
+        _r2Service = r2Service;
     }
 
     public async Task<bool> Guardar(IBrowserFile archivo, int pedidoId, string tipoDocumento)
@@ -44,31 +37,34 @@ public class DocumentoServices
             return false;
         }
 
-        var nombreAlmacenado = $"{Guid.NewGuid()}{extension}";
-        var rutaCompleta = Path.Combine(uploadFolder, nombreAlmacenado);
+        var nombrePersonalizado = Guid.NewGuid().ToString();
+        var urlArchivo = await _r2Service.SubirArchivo(archivo, "documentos_pedido", nombrePersonalizado);
 
-        await using var stream = new FileStream(rutaCompleta, FileMode.Create);
-        await archivo.OpenReadStream(maxSize).CopyToAsync(stream);
+        if (string.IsNullOrEmpty(urlArchivo))
+        {
+            return false;
+        }
 
         var documento = new Documento
         {
             TipoDocumento = tipoDocumento,
             FechaEmision = DateTime.Now,
             NombreOriginal = archivo.Name,
-            NombreAlmacenado = nombreAlmacenado,
-            RutaDocumento = $"/documento_pedido/{nombreAlmacenado}",
+            NombreAlmacenado = nombrePersonalizado + extension,
+            RutaDocumento = urlArchivo,
             PedidoId = pedidoId
         };
 
-        await using var contexto = await DbFactory.CreateDbContextAsync();
+        await using var contexto = await _dbFactory.CreateDbContextAsync();
         contexto.Documentos.Add(documento);
         await contexto.SaveChangesAsync();
+
         return true;
     }
 
     public async Task<List<Documento>> ObtenerDocumentosPorPedido(int pedidoId)
     {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
+        await using var contexto = await _dbFactory.CreateDbContextAsync();
         return await contexto.Documentos
             .Where(d => d.PedidoId == pedidoId)
             .OrderByDescending(d => d.FechaEmision)
@@ -77,7 +73,7 @@ public class DocumentoServices
 
     public async Task<bool> Eliminar(int documentoId)
     {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
+        await using var contexto = await _dbFactory.CreateDbContextAsync();
         var documento = await contexto.Documentos.FindAsync(documentoId);
 
         if (documento == null)
@@ -85,11 +81,7 @@ public class DocumentoServices
             return false;
         }
 
-        var rutaCompleta = Path.Combine(uploadFolder, documento.NombreAlmacenado);
-        if (File.Exists(rutaCompleta))
-        {
-            File.Delete(rutaCompleta);
-        }
+        await _r2Service.EliminarArchivo(documento.RutaDocumento);
 
         contexto.Documentos.Remove(documento);
         return await contexto.SaveChangesAsync() > 0;
