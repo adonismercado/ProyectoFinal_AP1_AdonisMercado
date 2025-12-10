@@ -17,6 +17,17 @@ public class PedidoServices(IDbContextFactory<Contexto> DbFactory)
     private async Task<bool> Insertar(Pedido pedido)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
+
+        foreach (var detalle in pedido.PedidoDetalles)
+        {
+            var vehiculo = await contexto.Vehiculos
+                .FindAsync(detalle.VehiculoId);
+
+            if (vehiculo != null)
+            {
+                vehiculo.StockVehiculo += detalle.Cantidad;
+            }
+        }
         contexto.Pedidos.Add(pedido);
         return await contexto.SaveChangesAsync() > 0;
     }
