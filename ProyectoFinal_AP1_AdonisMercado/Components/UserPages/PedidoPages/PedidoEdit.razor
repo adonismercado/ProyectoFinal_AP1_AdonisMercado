@@ -24,7 +24,7 @@
     <div class="card shadow border-0 w-100" style="width:100%;">
         <div class="card-body p-4">
 
-            <EditForm Model="Pedido" OnValidSubmit="Guardar" FormName="EditPedido">
+            <EditForm Model="Pedido" FormName="EditPedido">
                 <DataAnnotationsValidator />
 
                 <div class="d-flex flex-column align-items-center">
@@ -38,21 +38,25 @@
                                 <option value="@d.DistribuidorId">@d.Nombre</option>
                             }
                         </select>
+                        <ValidationMessage For="() => Pedido.DistribuidorId" />
                     </div>
 
                     <div class="mb-3 w-100">
                         <label class="form-label fw-bold">Pedido ID</label>
                         <input type="number" class="form-control" @bind="Pedido.PedidoId" readonly />
+                        <ValidationMessage For="() => Pedido.PedidoId" />
                     </div>
 
                     <div class="mb-3 w-100">
                         <label class="form-label fw-bold">Fecha</label>
                         <input type="date" class="form-control" @bind="Pedido.FechaPedido" />
+                        <ValidationMessage For="() => Pedido.FechaPedido" />
                     </div>
 
                     <div class="mb-3 w-100">
                         <label class="form-label fw-bold">Nombre del Pedido</label>
                         <input type="text" class="form-control" @bind="Pedido.NombrePedido" />
+                        <ValidationMessage For="() => Pedido.NombrePedido" />
                     </div>
 
                     <div class="mb-3 w-100">
@@ -61,6 +65,7 @@
                             <option value="No Enviado">No Enviado</option>
                             <option value="Enviado">Enviado</option>
                         </select>
+                        <ValidationMessage For="() => Pedido.Estado" />
                     </div>
 
                 </div>
@@ -122,7 +127,9 @@
                                         <td>@v.Traccion</td>
                                         <td>@v.NumeroPuertas</td>
                                         <td>@v.TipoCombustible</td>
-                                        <td>@det.Cantidad</td>
+                                        <td>
+                                            <input class="form-control" @bind="det.Cantidad" min="1" />
+                                        </td>
                                         <td>USD$@det.PrecioUnitario</td>
                                         <td>USD$@(det.Cantidad* det.PrecioUnitario)</td>
                                         <td>
@@ -155,7 +162,7 @@
                 </div>
 
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-danger px-4 d-flex align-items-center mx-auto gap-2">
+                    <button type="button" @onclick="Guardar" class="btn btn-danger px-4 d-flex align-items-center mx-auto gap-2">
                         <i class="fa-solid fa-floppy-disk"></i> Guardar
                     </button>
                 </div>
