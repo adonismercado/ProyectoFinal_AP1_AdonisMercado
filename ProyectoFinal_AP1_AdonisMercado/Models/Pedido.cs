@@ -21,6 +21,7 @@ public class Pedido
     public bool isActive { get; set; } = true;
 
     [ForeignKey("Distribuidor")]
+    [Required(ErrorMessage = "Debe seleccionar un distribuidor.")]
     public int DistribuidorId { get; set; }
     [InverseProperty("Pedidos")]
     public Distribuidor Distribuidor { get; set; }
