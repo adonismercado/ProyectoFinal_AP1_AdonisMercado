@@ -24,7 +24,7 @@
     <div class="card shadow border-0 w-100" style="width:100%;">
         <div class="card-body p-4">
 
-            <EditForm Model="Pedido" FormName="EditPedido">
+            <EditForm Model="Pedido" FormName="EditPedido" OnValidSubmit="Guardar">
                 <DataAnnotationsValidator />
 
                 <div class="d-flex flex-column align-items-center">
@@ -55,7 +55,7 @@
 
                     <div class="mb-3 w-100">
                         <label class="form-label fw-bold">Nombre del Pedido</label>
-                        <input type="text" class="form-control" @bind="Pedido.NombrePedido" />
+                        <input type="text" class="form-control" @bind="Pedido.NombrePedido" placeholder="Nombre" />
                         <ValidationMessage For="() => Pedido.NombrePedido" />
                     </div>
 
@@ -162,7 +162,7 @@
                 </div>
 
                 <div class="text-center mt-4">
-                    <button type="button" @onclick="Guardar" class="btn btn-danger px-4 d-flex align-items-center mx-auto gap-2">
+                    <button type="submit" class="btn btn-danger px-4 d-flex align-items-center mx-auto gap-2">
                         <i class="fa-solid fa-floppy-disk"></i> Guardar
                     </button>
                 </div>
