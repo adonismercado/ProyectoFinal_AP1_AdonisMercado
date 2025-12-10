@@ -23,7 +23,6 @@
 
 			<EditForm Model="@Vehiculo" OnValidSubmit="GuardarCambios" FormName="EditVehiculo">
 				<DataAnnotationsValidator />
-				<ValidationSummary />
 
 				<div class="mb-3">
 					<label class="form-label fw-bold">Vehículo ID</label>
@@ -93,13 +92,23 @@
 
 				<div class="mb-3">
 					<label class="form-label fw-bold">Estado</label>
-					<input type="text" class="form-control" @bind="Vehiculo.EstadoVehiculo" />
+					<InputSelect class="form-select" @bind-Value="Vehiculo.EstadoVehiculo">
+						<option value="" selected disabled>Seleccione:</option>
+						<option value="Nuevo">Nuevo</option>
+						<option value="Usado">Usado</option>
+					</InputSelect>
 					<ValidationMessage For="() => Vehiculo.EstadoVehiculo" />
 				</div>
 
 				<div class="mb-3">
 					<label class="form-label fw-bold">Tipo Combustible</label>
-					<input type="text" class="form-control" @bind="Vehiculo.TipoCombustible" />
+					<InputSelect class="form-select" @bind-Value="Vehiculo.TipoCombustible">
+						<option value="" selected disabled>Seleccione:</option>
+						<option value="Gasolina">Gasolina</option>
+						<option value="Diesel/Gasoil">Di&eacute;sel/Gasoil</option>
+						<option value="Gas">Gas</option>
+						<option value="Electrico">El&eacute;ctrico</option>
+					</InputSelect>
 					<ValidationMessage For="() => Vehiculo.TipoCombustible" />
 				</div>
 
