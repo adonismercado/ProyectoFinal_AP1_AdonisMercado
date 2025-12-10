@@ -214,7 +214,7 @@
                                             @v.Transmision • @v.Traccion
                                         </p>
                                         <p class="text-muted mb-2">
-                                            Puertas: @v.NumeroPuertas
+                                            Puertas: @v.NumeroPuertas - Stock @v.StockVehiculo
                                         </p>
 
                                         <p class="text-danger fw-bold">USD$@v.Precio</p>
@@ -285,6 +285,9 @@
                         <input type="number" class="form-control" @bind="Precio" readonly />
                     </div>
 
+                    <p class="text-muted text-center m-2">
+                        Nota: El Stock del vehiculo pasar&aacute; de: @VehiculoSeleccionado.StockVehiculo a @(VehiculoSeleccionado.StockVehiculo + Cantidad).
+                    </p>
                 </div>
 
                 <div class="modal-footer">
@@ -325,7 +328,7 @@
                                 @VehiculoSeleccionado.MarcaVehiculo @VehiculoSeleccionado.ModeloVehiculo
                             </h4>
 
-                            <p class="text-muted">Año: @VehiculoSeleccionado.AnioFabricacion</p>
+                            <p class="text-muted">Año: @VehiculoSeleccionado.AnioFabricacion - Stock: @VehiculoSeleccionado.StockVehiculo</p>
 
                             <p><strong>Color:</strong> @VehiculoSeleccionado.ColorVehiculo</p>
                             <p><strong>Motor:</strong> @VehiculoSeleccionado.Motor</p>
