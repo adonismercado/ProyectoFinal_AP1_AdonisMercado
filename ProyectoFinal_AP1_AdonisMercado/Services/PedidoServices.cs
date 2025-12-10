@@ -176,6 +176,20 @@ public class PedidoServices(IDbContextFactory<Contexto> DbFactory)
             return false;
         }
 
+        foreach (var detalle in pedido.PedidoDetalles)
+        {
+            var vehiculo = await contexto.Vehiculos.FindAsync(detalle.VehiculoId);
+            if (vehiculo != null)
+            {
+                vehiculo.StockVehiculo -= detalle.Cantidad;
+
+                if (vehiculo.StockVehiculo < 0)
+                {
+                    vehiculo.StockVehiculo = 0;
+                }
+            }
+        }
+
         contexto.PedidoDetalles.RemoveRange(pedido.PedidoDetalles);
         contexto.Pedidos.Remove(pedido);
         return await contexto.SaveChangesAsync() > 0;
