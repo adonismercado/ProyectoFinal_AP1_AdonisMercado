@@ -59,6 +59,20 @@ public class DocumentoServices
         contexto.Documentos.Add(documento);
         await contexto.SaveChangesAsync();
 
+        var totalDocs = await contexto.Documentos
+            .Where(d => d.PedidoId == pedidoId)
+            .CountAsync();
+        
+        if (totalDocs >= 2)
+        {
+            var pedido = await contexto.Pedidos.FindAsync(pedidoId);
+            if (pedido != null)
+            {
+                pedido.Estado = "Completado";
+                await contexto.SaveChangesAsync();
+            }
+        }
+
         return true;
     }
 
