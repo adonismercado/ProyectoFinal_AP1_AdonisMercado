@@ -25,74 +25,88 @@
 				<DataAnnotationsValidator />
 				<ValidationSummary />
 
-				<div class="mb-2">
-					<label class="form-label fw-bold">Vehiculo ID</label>
+				<div class="mb-3">
+					<label class="form-label fw-bold">Vehículo ID</label>
 					<input type="number" class="form-control" @bind="Vehiculo.VehiculoId" readonly />
+					<ValidationMessage For="() => Vehiculo.VehiculoId" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Marca</label>
 					<input type="text" class="form-control" @bind="Vehiculo.MarcaVehiculo" />
+					<ValidationMessage For="() => Vehiculo.MarcaVehiculo" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Modelo</label>
 					<input type="text" class="form-control" @bind="Vehiculo.ModeloVehiculo" />
+					<ValidationMessage For="() => Vehiculo.ModeloVehiculo" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Color</label>
 					<input type="text" class="form-control" @bind="Vehiculo.ColorVehiculo" />
+					<ValidationMessage For="() => Vehiculo.ColorVehiculo" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Chasis</label>
 					<input type="text" class="form-control" @bind="Vehiculo.NumeroChasis" />
+					<ValidationMessage For="() => Vehiculo.NumeroChasis" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Año Fabricación</label>
 					<input type="number" class="form-control" @bind="Vehiculo.AnioFabricacion" />
+					<ValidationMessage For="() => Vehiculo.AnioFabricacion" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Motor</label>
 					<input type="text" class="form-control" @bind="Vehiculo.Motor" />
+					<ValidationMessage For="() => Vehiculo.Motor" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Transmisión</label>
 					<input type="text" class="form-control" @bind="Vehiculo.Transmision" />
+					<ValidationMessage For="() => Vehiculo.Transmision" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Tracción</label>
 					<input type="text" class="form-control" @bind="Vehiculo.Traccion" />
+					<ValidationMessage For="() => Vehiculo.Traccion" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Número Puertas</label>
 					<input type="number" class="form-control" @bind="Vehiculo.NumeroPuertas" />
+					<ValidationMessage For="() => Vehiculo.NumeroPuertas" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Kilometraje</label>
 					<input type="number" class="form-control" @bind="Vehiculo.Kilometraje" />
+					<ValidationMessage For="() => Vehiculo.Kilometraje" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Estado</label>
 					<input type="text" class="form-control" @bind="Vehiculo.EstadoVehiculo" />
+					<ValidationMessage For="() => Vehiculo.EstadoVehiculo" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Tipo Combustible</label>
 					<input type="text" class="form-control" @bind="Vehiculo.TipoCombustible" />
+					<ValidationMessage For="() => Vehiculo.TipoCombustible" />
 				</div>
 
-				<div class="mb-2">
+				<div class="mb-3">
 					<label class="form-label fw-bold">Precio</label>
 					<input type="number" class="form-control" @bind="Vehiculo.Precio" />
+					<ValidationMessage For="() => Vehiculo.Precio" />
 				</div>
 
 				<div class="col-md-12">
