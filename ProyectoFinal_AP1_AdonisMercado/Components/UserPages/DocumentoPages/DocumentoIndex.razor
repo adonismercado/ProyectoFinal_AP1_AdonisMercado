@@ -49,6 +49,7 @@
                         <tr>
                             <th>Pedido ID</th>
                             <th>Nombre Pedido</th>
+                            <th>Estado</th>
                             <th>Commercial Invoice</th>
                             <th>Bill of Lading (B/L)</th>
                         </tr>
@@ -60,6 +61,17 @@
                             <tr>
                                 <td>@pedido.PedidoId</td>
                                 <td>@pedido.NombrePedido</td>
+
+                                <td>
+                                    @if (pedido.Estado == "Enviado")
+                                    {
+                                        <span class="badge bg-danger">Sin Completar</span>
+                                    }
+                                    else if (pedido.Estado == "Completado")
+                                    {
+                                        <span class="badge bg-success">Completado</span>
+                                    }
+                                </td>
 
                                 <td>
                                     <div class="d-flex justify-content-center gap-2">
@@ -305,7 +317,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaPedidos = await pedidoServices.ListarPedidos(p => p.Estado == "Enviado" && p.isActive);
+        ListaPedidos = await pedidoServices.ListarPedidos(p => p.Estado == "Enviado" || p.Estado == "Completado" && p.isActive);
     }
 
     public async Task Buscar()
