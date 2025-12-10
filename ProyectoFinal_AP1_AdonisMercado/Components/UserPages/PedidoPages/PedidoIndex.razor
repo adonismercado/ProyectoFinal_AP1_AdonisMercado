@@ -111,21 +111,21 @@
 											<i class="fa-solid fa-eye"></i>
 										</button>
 
-										@if (pedido.Estado != "Enviado" || pedido.Estado != "Completado")
-										{
-											<a href="/pedido/edit/@pedido.PedidoId"
-											   class="btn btn-warning text-white">
-												<i class="fa-solid fa-pen"></i>
-											</a>
-											
-										}
-										else
+										@if (pedido.Estado == "Enviado" || pedido.Estado == "Completado")
 										{
 											<button type="button" @onclick="AbrirMostrarMensaje"
 													class="btn btn-warning text-white">
 												<i class="fa-solid fa-pen"></i>
 											</button>
 										}
+										else
+										{
+											<a href="/pedido/edit/@pedido.PedidoId"
+											   class="btn btn-warning text-white">
+												<i class="fa-solid fa-pen"></i>
+											</a>
+										}
+
 
 										<button class="btn btn-danger"
 												@onclick="() => AbrirModal(pedido.PedidoId)">
@@ -240,7 +240,7 @@
 
 				<div class="modal-body text-center">
 					<i class="fa-solid fa-circle-xmark text-danger" style="font-size:50px"></i>
-					<p class="mt-3">No puede editar un pedido que ya ha sido enviado.</p>
+					<p class="mt-3">No puede editar un pedido que ya ha sido enviado o completado.</p>
 				</div>
 
 				<div class="modal-footer">
@@ -281,26 +281,26 @@
 		}
 		else if (FechaDesde.HasValue)
 		{
-			ListaPedidos = await pedidoServices.ListarPedidos( p => p.FechaPedido >= FechaDesde && p.isActive);
+			ListaPedidos = await pedidoServices.ListarPedidos(p => p.FechaPedido >= FechaDesde && p.isActive);
 		}
 		else if (FechaHasta.HasValue)
 		{
-			ListaPedidos = await pedidoServices.ListarPedidos( p => p.FechaPedido <= FechaHasta && p.isActive);
+			ListaPedidos = await pedidoServices.ListarPedidos(p => p.FechaPedido <= FechaHasta && p.isActive);
 		}
 
 		if (!string.IsNullOrWhiteSpace(ValorFiltro))
 		{
 			if (Filtro == "PedidoId" && int.TryParse(ValorFiltro, out var id))
 			{
-				ListaPedidos = await pedidoServices.ListarPedidos( p => p.PedidoId == id && p.isActive);
+				ListaPedidos = await pedidoServices.ListarPedidos(p => p.PedidoId == id && p.isActive);
 			}
 			else if (Filtro == "NombrePedido")
 			{
-				ListaPedidos = await pedidoServices.ListarPedidos( p => p.NombrePedido.ToLower().Contains(ValorFiltro) && p.isActive);
+				ListaPedidos = await pedidoServices.ListarPedidos(p => p.NombrePedido.ToLower().Contains(ValorFiltro) && p.isActive);
 			}
 			else if (Filtro == "Distribuidor")
 			{
-				ListaPedidos = await pedidoServices.ListarPedidos( p => p.Distribuidor.Nombre.ToLower().Contains(ValorFiltro) && p.isActive);
+				ListaPedidos = await pedidoServices.ListarPedidos(p => p.Distribuidor.Nombre.ToLower().Contains(ValorFiltro) && p.isActive);
 			}
 		}
 		else
