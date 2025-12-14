@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace ProyectoFinal_AP1_AdonisMercado.Services;
 
-public class CloudflareR2Service
+public class CloudflareR2Service : ICloudflareR2Service
 {
     private readonly IAmazonS3 _s3Client;
     private readonly string _bucketName;
