@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProyectoFinal_AP1_AdonisMercado.DAL;
 
-namespace ProyectoFinal_AP1_AdonisMercado.Test;
+namespace ProyectoFinal_AP1_AdonisMercado.Tests;
 
 public class TestDbFactory : IDbContextFactory<Contexto>
 {

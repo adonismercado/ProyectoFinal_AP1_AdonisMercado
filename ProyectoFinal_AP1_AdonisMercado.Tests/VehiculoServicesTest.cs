@@ -4,7 +4,7 @@ using ProyectoFinal_AP1_AdonisMercado.Models;
 using ProyectoFinal_AP1_AdonisMercado.Services;
 using Xunit;
 
-namespace ProyectoFinal_AP1_AdonisMercado.Test;
+namespace ProyectoFinal_AP1_AdonisMercado.Tests;
 
 public class VehiculoServiceTests
 {
