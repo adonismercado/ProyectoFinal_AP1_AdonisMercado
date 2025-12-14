@@ -42,7 +42,7 @@ builder.Services.AddScoped<DistribuidorServices>();
 builder.Services.AddScoped<PedidoServices>();
 builder.Services.AddScoped<DocumentoServices>();
 builder.Services.AddScoped<VehiculoService>();
-builder.Services.AddSingleton<CloudflareR2Service>();
+builder.Services.AddScoped<ICloudflareR2Service, CloudflareR2Service>();
 builder.Services.AddBlazorBootstrap();
 
 var app = builder.Build();
