@@ -1,131 +1,188 @@
-Usuarios:
+# 🚗 AutoFranklin - Sistema de Gestión de Pedidos
 
-user@user.com - User123!
-admin@admin.com - Admin123!
+> Sistema de gestión de pedidos de vehículos para AutoFranklin, permitiendo a los empleados realizar pedidos a distribuidores de manera eficiente y organizada.
 
-Guia Proyecto Final Programacion Aplicada 1 3-2025
+## 📖 Descripción
 
+AutoFranklin es una aplicación diseñada para facilitar la gestión de pedidos de vehículos entre la empresa y sus distribuidores. El sistema permite administrar distribuidores, crear pedidos con múltiples vehículos, gestionar documentación y mantener un control completo del inventario.
 
-El programa consiste en una aplicacion para la empresa de vehiculos AutoFranklin, en el que sus empleados podran hacer pedidos a otras empresas encargadas de distribuir los vehiculos en el pais.
+## 🔐 Credenciales de Acceso
 
-Al iniciar el programa, tendremos el menu de Login donde se podra iniciar sesion en el programa introduciendo el correo electronico y la contraseña. Al dar click a "Iniciar Sesion" se redirige automaticamente a la
-pantalla principal dependiendo de que rol tenga el usuario con el que se haya iniciado sesion.
+### Usuario Estándar
+- **Email:** `user@user.com`
+- **Contraseña:** `User123!`
 
-- ROL USUARIO
-En el rol Usuario tendremos los siguientes registros: Distribuidores, Pedidos, Documentos.
-Al iniciar sesion con un usuario, tendremos una pagina principal donde se podran observar algunas estadisticas como la cantidad de distribuidores agregados, la cantidad de pedidos y la cantidad de pedidos enviados. Ademas, unos botones de acceso
-rapido a los 3 registros, y una tabla donde se podran observar los ultimos 5 pedidos que han sido registrados al sistema.
+### Administrador
+- **Email:** `admin@admin.com`
+- **Contraseña:** `Admin123!`
 
-Registros:
+## ✨ Características Principales
 
-Distribuidores:
-Esta es la entidad que se encarga de distribuir los vehiculos. Los pedidos se realizan a un distribuidor.
-Consulta:
-En la pagina principal de distribuidores, aparece la opcion de poder filtrar los distribuidores agregados por ID, Nombre, Correo Electronico, Telefono y Fax. Ademas, un input buscar para digitar la palabra clave a filtrar.
-Tambien esta el boton Agregar Distribuidor, que por como su nombre indica el usuario tendra la posibilidad de poder agregar un distribuidor al sistema. Se crea con los siguientes campos:
+- 📊 Dashboard con estadísticas en tiempo real
+- 🏢 Gestión completa de distribuidores
+- 📦 Sistema de pedidos multi-vehículo
+- 📄 Manejo de documentos legales (Commercial Invoice, Bill of Lading)
+- 🚙 Catálogo de vehículos con imágenes
+- 🔍 Filtros avanzados de búsqueda
+- ♻️ Sistema de habilitación/deshabilitación de entidades
 
-- DistribuidorID (valor entero, colocado automaticamente por el sistema).
-- Nombre (valor string, se permiten letras y espacios).
-- Email (valor string, @ obligatoria).
-- Telefono (valor string, solo se permiten numeros).
-- Fax (valor string, solo se permiten numeros).
+## 👥 Roles de Usuario
 
-Luego de llenado los campos se procede a guardar el distribuidor.
+### 🔵 ROL USUARIO
 
-Tambien en la pantalla principal aparece la tabla donde estan los distribuidores que tenemos agregados, con sus respectivos campos. Al final, aparecen las siguientes opciones:
+Acceso a las siguientes funcionalidades:
 
-- Editar Distribuidor: donde se podran editar los campos de un distribuidor ya agregado.
-- Deshabilitar Distribuidor : donde se podra deshabilitar al distribuidor y ocultarlo del sistema.
-- Ver Pedidos: donde se podran visualizar los pedidos que han sido ordenados al distribuidor.
+#### **Dashboard Principal**
+- Estadísticas de distribuidores agregados
+- Total de pedidos realizados
+- Pedidos enviados
+- Accesos rápidos a registros
+- Tabla con los últimos 5 pedidos
 
-Pedidos:
-Esta es la entidad que se encarga de tener todos los datos necesarios para crear un pedido. Los empleados podran hacer pedidos a los distribuidores, con X cantidad de vehiculos.
-Consulta:
-En la pagina principal de pedidos, aparece la opcion de poder filtrar los pedidos agregados por Fecha, ID, Nombre, y el Distribuidor. Ademas, se podra filtrar por la fecha en el que el pedido fue realizado conjuntamente con el campo seleccionado.
-Tambien contiene un input de busqueda para escribir la palabra clave a filtrar. Al lado aparece la opcion de Agregar Pedido al sistema. Se crea con los siguientes campos:
+#### **📍 Distribuidores**
 
-- Distribuidor (obligatorio, debe de estar agregado al sistema).
-- PedidoID (valor entero, obligatorio, colocado automaticamente por el sistema).
-- Fecha (valor fecha, obligatorio, en formato dia/mes/año).
-- Nombre (valor string, obligatorio, se permiten letras y espacios).
-- Estado (valor string, obligatorio, se inicializa en "No enviado").
+**Gestión:**
+- Agregar nuevos distribuidores
+- Editar información existente
+- Deshabilitar distribuidores
+- Ver pedidos por distribuidor
 
-Despues de llenar estos campos, se procede a agregar el o los vehiculos al pedido. Debajo aparece una tabla de Vehiculos, donde aparece en la parte derecha la opcion de Seleccionar Vehiculo.
-En Seleccionar Vehiculo, aparece una lista de vehiculos que ha sido agregado al sistema, con una imagen respectiva del vehiculo, alguna de sus caracteristicas y dos opciones: 
+**Campos:**
+- `DistribuidorID` (automático)
+- `Nombre` (letras y espacios)
+- `Email` (formato válido con @)
+- `Teléfono` (solo números)
+- `Fax` (solo números)
 
-- Detalles: opcion para ver las caracteristicas completas del vehiculo seleccionado.
-- Seleccionar: opcion para agregar el vehiculo al pedido. Al darle click a seleccionar aparece una ventana emergente donde se especificara la cantidad del vehiculo a agregar, y el precio (no para colocar el precio, solo para referencia).
-  Luego de especificada la cantidad, se le da click a Agregar, y el vehiculo se agrega al pedido. Se pueden añadir multiples vehiculos al mismo pedido.
+**Filtros disponibles:**
+- ID
+- Nombre
+- Correo Electrónico
+- Teléfono
+- Fax
 
-Ya luego de agregar el vehiculo, en la tabla de Vehiculos aparecen las especificaciones completas del vehiculo, y al final esta la opcion de poder remover el vehiculo del pedido.
+#### **📦 Pedidos**
 
-Ya con los vehiculos agregados se puede completar la creacion del pedido dandole al boton "Guardar" en la parte de debajo.
+**Proceso de creación:**
+1. Seleccionar distribuidor
+2. Asignar fecha y nombre al pedido
+3. Agregar vehículos (múltiples permitidos)
+4. Especificar cantidad por vehículo
+5. Guardar pedido
 
-En la pagina principal aparece la tabla donde se podran observar los pedidos realizados, con sus campos. Y al final de cada pedido se encuentran las siguientes opciones:
+> Nota: Al agregar un vehiculo al pedido, se le dira al usuario la cantidad de stock que existe de ese vehiculo.
 
-- Enviar Pedido: donde se confirmara el envio del pedido al distribuidor correspondiente.
-- Visualizar Pedido: donde se podran observar el detalle completo del pedido, con los datos del distribuidor, los datos del pedido y los datos de los vehiculos agregados al pedido.
-- Editar Pedido: donde se podran editar los campos del pedido ya realizado.
-- Deshabilitar Pedido: donde se podra deshabilitar al pedido y ocultarlo del sistema.
+**Campos:**
+- `Distribuidor` (obligatorio, debe existir)
+- `PedidoID` (automático)
+- `Fecha` (formato DD/MM/AAAA)
+- `Nombre` (letras y espacios)
+- `Estado` (inicial: "No enviado". "Enviado": cuando se le envia al distribuidor. "Completado": cuando esta enviado y tiene sus 2 documentos)
 
-Documentos:
-Esta es la entidad que contiene los documentos relacionados a un pedido en especifico. Para poder agregar documentos a un pedido, el pedido debe estar en el estado "Enviado", debido a que los documentos necesarios para un pedido los provee el
-Distribuidor luego del pedido ser procesado.
-Consulta:
-En la pagina principal de documentos, aparece la opcion de poder filtrar los pedidos que han sido enviados por: ID, Nombre. Ademas, esta el input de Buscar donde se digitara la palabra clave a filtrar.
-En la tabla, apareceran los pedidos que han sido enviados por el usuario al distribuidor. Apareceran tambien 2 tipos de documentos:
+**Acciones disponibles:**
+- ✅ Enviar pedido
+- 👁️ Visualizar detalles completos
+- ✏️ Editar pedido
+- 🚫 Deshabilitar pedido
 
-- Commercial Invoice: Es el contrato de venta o una especie de transacción.
-- Bill of Lading (B/L): Documento legal que sirve como recibo de las mercancías.
+**Filtros disponibles:**
+- Fecha
+- ID
+- Nombre
+- Distribuidor
 
-Y debajo de cada uno las siguientes opciones:
+#### **📄 Documentos**
 
-- Subir Documento: donde se podra subir el documento especificado.
-- Ver Documento: donde se podra ver el documento subido. Dentro de esta opcion se encuentra tambien la opcion de eliminar el documento seleccionado.
+Gestión de documentos legales para pedidos enviados.
 
-- ROL ADMIN
-En el rol admin tenemos los siguientes registros: Deshabilitados y Vehiculos.
-Al iniciar sesion como admin tendremos una pantalla principal donde se podran observar alguna de las estadisticas como la cantidad de vehiculos agregados, la cantidad de vehiculos activos habilitados y la cantidad de
-vehiculos deshabilitados. Ademas, un acceso rapido a los registros de Deshabilitados y Vehiculos, y una tabla donde se podran observar los ultimos 5 vehiculos agregados al sistema.
+**Tipos de documentos:**
+- **Commercial Invoice:** Contrato de venta/transacción
+- **Bill of Lading (B/L):** Recibo legal de mercancías
 
-Deshabilitados:
-En este registro el admin tendra la capacidad de volver a habilitar un distribuidor o un pedido que haya sido deshabilitado por un usuario. Ademas, se podra tambien eliminar completamente un distribuidor o pedido deshabilitado
-Consulta:
-Al inicio tendremos la opcion de cambiar a los Distribuidores deshabilitados o Pedidos deshabilitados. Debajo se encuentra una tabla donde aparecen las entidades deshabilitadas por el usuario, con sus atributos.
-Al final de cada entidad tendremos estas opciones:
+**Acciones:**
+- 📤 Subir documento
+- 👁️ Ver documento
+- 🗑️ Eliminar documento
 
-- Habilitar Entidad: donde se podra volver a habilitar la entidad y hacerla visible en el sistema.
-- Eliminar Entidad: donde se podra eliminar completamente la entidad del sistema.
+> ⚠️ **Nota:** Solo se pueden agregar documentos a pedidos en estado "Enviado" o "Completado"
 
-Vehiculos:
-Esta es la entidad con la que se crean los pedidos, cada vehiculo puede pertenecer a 1 o mas pedidos. En el registro de vehiculos tenemos la opcion de filtrar los vehiculos que han sido agregados por: ID, Marca, Modelo, 
-Color, Numero de Chasis, Año de Fabricacion, Motor, Transmision, Traccion, Puertas, Kilometraje, Combustible y Precio. Tambien esta el input de Buscar para poder filtrar por X palabra clave. Y tambien aparecera la opcion
-de poder mostrar los vehiculos que han sido deshabilitados. Y la opcion de Agregar Vehiculo. Se crea con los siguientes campos:
+---
 
-- VehiculoID (valor entero, colocado automaticamente por el sistema).
-- Marca (valor string, se permite usar letras).
-- Modelo (valor string, se permite usar letras y numeros).
-- Color (valor string, se permite usar letras).
-- Numero Chasis (valor string, se permite usar letras y numeros).
-- Año Fabricacion (valor int, solo numeros).
-- Motor (valor string, se permite letras y numeros).
-- Transmision (valor string, se permite letras y numeros).
-- Traccion (valor string, se permite letras y numeros).
-- Numero Puertas (valor int, solo numeros).
-- Kilometraje (valor int, solo numeros).
-- Estado (valor string, se permite usar letras).
-- Tipo Combustible (valor string, se permite usar letras).
-- Precio (valor decimal, solo numeros).
-- Imagen (archivo, se permite .jpg, .png, .pdf, .webp, .jpeg).
+### 🔴 ROL ADMIN
 
-Despues de ingresado los datos, se procede a guardar el vehiculo dandole al boton "Guardar" en la parte de debajo.
+Acceso a funcionalidades avanzadas de administración:
 
-Luego de agregar el vehiculo, aparecera en la pantalla principal de vehiculos que estan agregados al sistema. Al final del vehiculo se encuentran las siguientes opciones:
+#### **Dashboard Principal**
+- Total de vehículos agregados
+- Vehículos activos
+- Vehículos deshabilitados
+- Accesos rápidos a registros
+- Tabla con los últimos 5 vehículos agregados
 
-- Editar Vehiculo: donde se podran gestionar los campos de un vehiculo agregado.
-- Deshabilitar Pedido: donde se podra deshabilitar un vehiculo y ocultarlo a un User.
+#### **♻️ Deshabilitados**
 
-Si activamos la opcion "Mostrar Deshabilitados" en la pagina principal de vehiculos, apareceran los vehiculos que han sido desactivados por el admin. Ademas, se encuentran las siguientes opciones:
+Control de entidades deshabilitadas por usuarios.
 
-- Habilitar Vehiculo: donde se permite volver a habilitar un vehiculo deshabilitado.
-- Eliminar Vehiculo: donde se podra eliminar completamente un vehiculo del sistema.
+**Funcionalidades:**
+- Ver distribuidores deshabilitados
+- Ver pedidos deshabilitados
+- Habilitar entidades nuevamente
+- Eliminar permanentemente del sistema
+
+#### **🚙 Vehículos**
+
+**Gestión completa del catálogo:**
+
+**Campos del vehículo:**
+- `VehiculoID` (automático)
+- `Stock` (incrementa o decrementa automaticamente)
+- `Marca` (texto)
+- `Modelo` (texto y números)
+- `Color` (texto)
+- `Número de Chasis` (alfanumérico)
+- `Año de Fabricación` (numérico)
+- `Motor` (alfanumérico)
+- `Transmisión` (alfanumérico)
+- `Tracción` (alfanumérico)
+- `Número de Puertas` (numérico)
+- `Kilometraje` (numérico)
+- `Estado` (texto)
+- `Tipo de Combustible` (texto)
+- `Precio` (decimal)
+- `Imagen` (formatos: .jpg, .png, .pdf, .webp, .jpeg)
+
+> Nota: al agregar el vehiculo, se coloca el stock automaticamente en 0. Para agregar stock al vehiculo se debe realizar un pedido.
+
+**Acciones disponibles:**
+- ➕ Agregar nuevo vehículo
+- ✏️ Editar vehículo existente
+- 🚫 Deshabilitar vehículo
+- ✅ Habilitar vehículo
+- 🗑️ Eliminar permanentemente
+
+**Filtros avanzados:**
+- ID, Marca, Modelo, Color
+- Número de Chasis, Año
+- Motor, Transmisión, Tracción
+- Puertas, Kilometraje
+- Combustible, Precio
+- Mostrar/Ocultar deshabilitados
+
+## 📝 Validaciones del Sistema
+
+### Distribuidores
+- ✅ Email con formato válido (@)
+- ✅ Teléfono y Fax solo numéricos
+- ✅ Nombre con letras y espacios
+
+### Pedidos
+- ✅ Distribuidor debe existir en el sistema
+- ✅ Fecha en formato correcto
+- ✅ Al menos un vehículo agregado
+- ✅ Cantidad especificada por vehículo
+
+### Vehículos
+- ✅ Año de fabricación numérico
+- ✅ Precio en formato decimal
+- ✅ Imagen en formatos permitidos
+- ✅ Campos alfanuméricos según especificación
