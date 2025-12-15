@@ -40,6 +40,14 @@
                 <p class="display-6 fw-bold mb-0">@PedidosEnviados</p>
             </div>
         </div>
+
+        <div class="col-12 col-md-3">
+            <div class="card shadow stat-card p-4 text-center">
+                <i class="fa fa-check text-danger" style="font-size:36px;"></i>
+                <h6 class="mt-3 text-uppercase fw-bold">Pedidos Completos</h6>
+                <p class="display-6 fw-bold mb-0">@PedidosCompletados</p>
+            </div>
+        </div>
     </div>
 
     <div class="row mt-4 justify-content-center">
@@ -101,6 +109,10 @@
                                         {
                                             <span class="badge bg-danger">Enviado</span>
                                         }
+                                        else if (p.Estado == "Completado")
+                                        {
+                                            <span class="badge bg-success">Completado</span>
+                                        }
                                         else
                                         {
                                             <span class="badge bg-secondary">No Enviado</span>
@@ -121,22 +133,24 @@
 </div>
 
 @code {
-	public int TotalDistribuidores { get; set; }
-	public int PedidosActivos { get; set; }
-	public int PedidosEnviados { get; set; }
-	public int DocumentosPendientes { get; set; }
-	public int PedidosNoEnviados { get; set; }
+    public int TotalDistribuidores { get; set; }
+    public int PedidosActivos { get; set; }
+    public int PedidosEnviados { get; set; }
+    public int PedidosCompletados { get; set; }
+    public int DocumentosPendientes { get; set; }
+    public int PedidosNoEnviados { get; set; }
 
-	public List<Pedido> UltimosPedidos { get; set; } = new();
+    public List<Pedido> UltimosPedidos { get; set; } = new();
 
-	protected override async Task OnInitializedAsync()
-	{
-		TotalDistribuidores = (await distribuidorServices.ListarDistribuidores(d => d.isActive)).Count;
+    protected override async Task OnInitializedAsync()
+    {
+        TotalDistribuidores = (await distribuidorServices.ListarDistribuidores(d => d.isActive)).Count;
 
-		var pedidos = await pedidoServices.ListarPedidos(p => p.isActive);
-		PedidosActivos = pedidos.Count;
-		PedidosEnviados = pedidos.Count(p => p.Estado == "Enviado");
-		PedidosNoEnviados = pedidos.Count(p => p.Estado == "No Enviado");
+        var pedidos = await pedidoServices.ListarPedidos(p => p.isActive);
+        PedidosActivos = pedidos.Count;
+        PedidosEnviados = pedidos.Count(p => p.Estado == "Enviado");
+        PedidosCompletados = pedidos.Count(p => p.Estado == "Completado");
+        PedidosNoEnviados = pedidos.Count(p => p.Estado == "No Enviado");
 
 		UltimosPedidos = pedidos
 			.OrderByDescending(p => p.PedidoId)
